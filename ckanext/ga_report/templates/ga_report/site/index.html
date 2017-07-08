@@ -3,89 +3,62 @@
 
 {% block title %}Site Usage - {{ super() }}{% endblock %}
 
-
-{% block optional_head %}
+{# {% block optional_head %}
     <link rel="stylesheet" type="text/css" href="/scripts/vendor/rickshaw.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/ga_report.css?1"/>
-    <script type="text/javascript" src="/scripts/modernizr-2.6.2.custom.js"></script>
+
+    {% resource 'scripts/scripts/modernizr-2.6.2.custom.js' %}
+    {% resource 'scripts/scripts/ckanext_ga_reports.js' %}
+    {% resource 'scripts/scripts/vendor/jquery.sparkline.modified.js' %}
+    {% resource 'scripts/scripts/rickshaw_ie7_shim.js' %}
+    {% resource 'scripts/scripts/vendor/d3.v2.js' %}
+    {% resource 'scripts/scripts/vendor/d3.layout.min.js' %}
+    {% resource 'scripts/scripts/vendor/rickshaw.min.js' %}
+
+     <script type="text/javascript" src="/scripts/modernizr-2.6.2.custom.js"></script>
     <script type="text/javascript" src="/scripts/ckanext_ga_reports.js?1"></script>
     <script type="text/javascript" src="/scripts/vendor/jquery.sparkline.modified.js"></script>
     <script type="text/javascript" src="/scripts/rickshaw_ie7_shim.js"></script>
     <script type="text/javascript" src="/scripts/vendor/d3.v2.js"></script>
     <script type="text/javascript" src="/scripts/vendor/d3.layout.min.js"></script>
-    <script type="text/javascript" src="/scripts/vendor/rickshaw.min.js"></script>
-  {% endblock %}
+    <script type="text/javascript" src="/scripts/vendor/rickshaw.min.js"></script> 
+ {% endblock %}  #}
+
+{% block header %}
+  <link rel="stylesheet" type="text/css" href="/scripts/vendor/rickshaw.min.css"/>
+  <link rel="stylesheet" type="text/css" href="/css/ga_report.css?1"/>
+  <script  src="https://code.jquery.com/jquery-1.3.min.js" integrity="sha256-kAGRpEMRXYtIqdaNMGLos9cSlyeVG4YXRltIW68lMAY=" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="/scripts/modernizr-2.6.2.custom.js"></script>
+  <script type="text/javascript" src="/scripts/ckanext_ga_reports.js?1"></script>
+  <script type="text/javascript" src="/scripts/vendor/jquery.sparkline.modified.js"></script>
+  <script type="text/javascript" src="/scripts/rickshaw_ie7_shim.js"></script>
+  <script type="text/javascript" src="/scripts/vendor/d3.v2.js"></script>
+  <script type="text/javascript" src="/scripts/vendor/d3.layout.min.js"></script>
+  <script type="text/javascript" src="/scripts/vendor/rickshaw.min.js"></script>
+{% endblock %}
 
 {% block breadcrumb_content %}
     <li><a href="/data/site-usage">Site Analytics</a></li>
     <li><a href="/data/site-usage">Site-wide</a></li>
-  {% endblock %}
+{% endblock %}
 
-{% block primary_content_inner %}
+{% block primary_content %}
   <div>
-    <div class="row">
       <div class="col-sm-7 col-md-8 col-lg-9">
         {% with download_link=h.url_for(controller='ckanext.ga_report.controller:GaReport',action='csv',month=c.month or 'all') %}
-          <a class="btn button btn-primary btn-sm pull-right" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
+          <a class="btn button btn-primary btn-sm pull-right download_button" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
         {% endwith %}
-        <h1>{{g.site_title.capitalize()}} Usage</h1>
-      </div>
-      <div class="col-sm-5 col-md-4 col-lg-3">
-        <div class="panel panel-default">
-          <div class="panel-heading"><strong>Jump To...</strong></div>
-          <div class="panel-body">
-            <ul>
-              <li><a href="/data/site-usage/publisher">Publisher Usage Statistics</a></li>
-              <li><a href="/data/site-usage/dataset">Dataset Usage Statistics</a></li>
-            </ul>
-          </div>
+          <a class="btn button btn-primary btn-sm pull-right download_button" href="/data/site-usage/publisher">Publisher Usage Statistics</a>
+          <a class="btn button btn-primary btn-sm pull-right download_button" href="/data/site-usage/dataset">Dataset Usage Statistics</a>
         </div>
-      </div>
     </div>
 
     <div class="row" style="background: #fff;">
-      <div class="col-md-4">
-        <div class="whitebox">
-          <strong>Graph Legend</strong>
-          <div id="graph-legend-container">
-            <div style="display: none;" id="legend_none">(No graph is loaded)</div>
-          </div>
-        </div>
-      </div>
       <div class="col-md-8">
-        <div class="whitebox">
-          <div class="tabbable">
-            <ul class="nav nav-tabs">
-              <li class="active"><a href="#totals" data-hash="totals" data-toggle="tab">Totals</a></li>
-              <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Browsers
-                      <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                      <li><a href="#browsers_names" data-hash="browsers_names" data-toggle="tab">Browsers</a></li>
-                      <li><a href="#browsers_versions" data-hash="browsers_versions" data-toggle="tab">Versions</a></li>
-                  </ul>
-              </li>
-              <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Operating Systems
-                      <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                      <li><a href="#os" data-hash="os" data-toggle="tab">Operating Systems</a></li>
-                      <li><a href="#os_versions" data-hash="os_versions" data-toggle="tab">Versions</a></li>
-                  </ul>
-              </li>
-              <li class="dropdown">
-                  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Social
-                      <b class="caret"></b></a>
-                  <ul class="dropdown-menu">
-                      <li><a href="#social_networks" data-hash="social_networks" data-toggle="tab">All networks</a></li>
-                      <li><a href="#social_referrals_totals" data-hash="social_referrals_totals" data-toggle="tab">Referral links</a></li>
-                  </ul>
-              </li>
-              <li><a href="#languages" data-hash="languages" data-toggle="tab">Languages</a></li>
-              <li><a href="#country" data-hash="country" data-toggle="tab">Country</a></li>
-            </ul>
-            <div class="tab-content">
-              <div class="tab-pane active" id="totals">
+        <div class="">
+          <div class="">
+		   <hr>
+		   <h2>Site Traffic</h2>
                    <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      {{m.month_selector(c.month, c.months, c.day)}}
@@ -94,109 +67,93 @@
                      <tr>
                        <th>Name</th>
                        <th class="td-numeric">Value</th>
-                       <th>History</th>
                      </tr>
                      {% for name, value, graph in c.global_totals %}
                           <tr>
                               <td>{{name}}</td>
                               <td class="td-numeric">{{value}}</td>
-                              <td class="sparkline-cell">
-                                <span class="sparkline" sparkTooltips="{{h.join_x(graph)}}">
-                                  {{ h.join_y(graph) }}
-                                </span>
-                              </td>
                           </tr>
                       {% endfor %}
                      </table>
-              </div>
-               <div class="tab-pane" id="browsers_versions">
-                   {{m.rickshaw_graph(c.browser_versions_graph,'browser-versions',mode='stack')}}
+               <div class="" id="browsers_versions">
                    <hr/>
-                   <p>Note: Where a browser has a large number of versions, these have been grouped together.</p>
+		   <h2>User Browser Versions</h2>
+                   <p>*Browsers with a large number of versions have been grouped together.</p>
                    <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      {{m.month_selector(c.month, c.months, c.day)}}
                    </form>
-                <hr/>
                    {{m.stat_table(c.browser_versions)}}
                </div>
-               <div class="tab-pane" id="browsers_names">
-                   {{m.rickshaw_graph(c.browsers_graph,'browsers',mode='stack')}}
+               <div class="" id="browsers_names">
                    <hr/>
+		   <h2>User Browser Names</h2>
                    <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      {{m.month_selector(c.month, c.months, c.day)}}
                    </form>
-                <hr/>
                    {{m.stat_table(c.browsers)}}
                </div>
-               <div class="tab-pane" id="os">
-                   {{m.rickshaw_graph(c.os_graph,'os',mode='stack')}}
+               <div class="" id="os">
                    <hr/>
+		   <h2>User Operating Systems</h2>
                    <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      {{m.month_selector(c.month, c.months, c.day)}}
                    </form>
-                <hr/>
                    {{m.stat_table(c.os)}}
                </div>
-               <div class="tab-pane" id="os_versions">
-                   {{m.rickshaw_graph(c.os_versions_graph,'os_versions',mode='stack')}}
+               <div class="" id="os_versions">
                    <hr/>
+		   <h2>User Operating System Versions</h2>
                    <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      {{m.month_selector(c.month, c.months, c.day)}}
                    </form>
-                <hr/>
                    {{m.stat_table(c.os_versions)}}
                </div>
-              <div class="tab-pane" id="social_referrals_totals">
-                  <p>Number of visits that were referred from social networks</p>
+              <div class="" id="social_referrals_totals">
+		  <h2>Social Referrals Totals</h2>
+                  <p>*Number of visits that were referred from social networks</p>
                    <form class="form-inline" action=""{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}"" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      {{m.month_selector(c.month, c.months, c.day)}}
                    </form>
                   {{m.social_table(c.social_referrer_totals)}}
               </div>
-              <div class="tab-pane" id="social_networks">
-                   {{m.rickshaw_graph(c.social_networks_graph, 'social_networks',mode='stack')}}
+              <div class="" id="social_networks">
                    <hr/>
+		   <h2>Social Networks Referal Percentages</h2>
                   <p>Percentage of visits that were referred from these social networks</p>
                    <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      {{m.month_selector(c.month, c.months, c.day)}}
                    </form>
-                <hr/>
                    {{m.stat_table(c.social_networks, 'Visits')}}
               </div>
-              <div class="tab-pane" id="languages">
-                   {{m.rickshaw_graph(c.languages_graph,'languages',mode='stack')}}
+              <div class="" id="languages">
                    <hr/>
+		   <h2>Languages</h2>
                    <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      {{m.month_selector(c.month, c.months, c.day)}}
                    </form>
-                <hr/>
                    {{m.stat_table(c.languages)}}
               </div>
-              <div class="tab-pane" id="country">
-                   {{m.rickshaw_graph(c.country_graph,'country',mode='stack')}}
+              <div class="" id="country">
                    <hr/>
+		   <h2>Country</h2>
                    <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
                      <h4 class="ga-reports-heading">Show stats table for:</h4>
                      {{m.month_selector(c.month, c.months, c.day)}}
                    </form>
-                <hr/>
                    {{m.stat_table(c.country)}}
               </div>
-             </div>
-           </div>
        </div>
       </div>
     </div>
 
   </div>
-
     <script type="text/javascript">
       $(function() {
         CKAN.GA_Reports.bind_sparklines();
