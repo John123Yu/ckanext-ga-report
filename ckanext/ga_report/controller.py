@@ -174,7 +174,16 @@ class GaReport(BaseController):
             'Operating Systems': 'os',
             'Social sources': 'social_networks',
             'Languages': 'languages',
-            'Country': 'country'
+            'Country': 'country',
+	    'Browser sizes': 'browser_sizes',
+	    'Device category': 'device_category',
+	    'Region': 'region',
+	    'Metro': 'metro',
+	    'Referral sources': 'referral_sources',
+	    'Page views': 'page_views',
+	    'Page avgTime': 'page_avgTime',
+	    'Landing page': 'landing_page',
+	    'Exit page' : 'exit_page'
         }
 
         def shorten_name(name, length=60):
@@ -211,7 +220,7 @@ class GaReport(BaseController):
                           order_by('ga_stat.value::int desc')
             d = collections.defaultdict(int)
             for e in q.all():
-                d[e.key] += int(e.value)
+                d[e.key] += float(e.value)
             entries = []
             for key, val in d.iteritems():
                 entries.append((key,val,))
@@ -238,9 +247,12 @@ class GaReport(BaseController):
             # a percentage of the total
             if k == 'Social sources':
                 total = sum([x for n,x,graph in c.global_totals if n == 'Total visits'])
+		setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
+	    elif k in ('Page views','Page avgTime','Landing page','Exit page'):
+		setattr(c, v, [(k,v) for k,v in entries ])
             else:
                 total = sum([num for _,num in entries])
-            setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
+                setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
 
         return render('ga_report/site/index.html')
 

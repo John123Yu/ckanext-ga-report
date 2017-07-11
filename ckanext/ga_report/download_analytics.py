@@ -11,8 +11,8 @@ import ga_model
 log = __import__('logging').getLogger(__name__)
 
 FORMAT_MONTH = '%Y-%m'
-MIN_VIEWS = 50
-MIN_VISITS = 20
+MIN_VIEWS = 0
+MIN_VISITS = 0
 
 
 class DownloadAnalytics(object):
@@ -247,9 +247,9 @@ class DownloadAnalytics(object):
 
         start_date = '%s-01' % period_name
         end_date = '%s-%s' % (period_name, last_day_of_month)
-        funcs = ['_totals_stats', '_social_stats', '_os_stats',
+        funcs = ['_totals_stats', '_referral_stats', '_os_stats',
                  '_locale_stats', '_browser_stats', '_mobile_stats',
-                 '_download_stats'
+                 '_download_stats', '_page_stats'
                  ]
         for f in funcs:
             log.info('Downloading analytics for %s' % f.split('_')[1])
@@ -371,7 +371,7 @@ class DownloadAnalytics(object):
             args["end-date"] = end_date
             args["ids"] = "ga:" + self.profile_id
 
-            args["metrics"] = "ga:pageviewsPerVisit,ga:avgTimeOnSite,ga:percentNewVisits,ga:visits"
+            args["metrics"] = "ga:pageviewsPerSession,ga:avgTimeOnPage,ga:percentNewSessions,ga:sessions,ga:newUsers,ga:avgSessionDuration,ga:bounceRate"
             args["alt"] = "json"
 
             results = self._get_ga_data(args)
@@ -382,9 +382,12 @@ class DownloadAnalytics(object):
         result_data = results.get('rows')
         data = {
             'Pages per visit': result_data[0][0],
-            'Average time on site': result_data[0][1],
-            'New visits': result_data[0][2],
+            'Average time on a page': result_data[0][1],
+            'New users percentage': result_data[0][2],
             'Total visits': result_data[0][3],
+	    'New users': result_data[0][4],
+	    'Average time on site': result_data[0][5],
+	    'Bounce rate': result_data[0][6]
         }
         ga_model.update_sitewide_stats(period_name, "Totals", data, period_complete_day)
 
@@ -442,6 +445,7 @@ class DownloadAnalytics(object):
             results = dict(url=[])
 
         result_data = results.get('rows')
+	
         data = {}
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[2])
@@ -454,6 +458,54 @@ class DownloadAnalytics(object):
         self._filter_out_long_tail(data, MIN_VIEWS)
         ga_model.update_sitewide_stats(period_name, "Country", data, period_complete_day)
 
+	try:
+            args = {}
+            args["max-results"] = 100000
+            args["start-date"] = start_date
+            args["end-date"] = end_date
+            args["ids"] = "ga:" + self.profile_id
+
+            args["dimensions"] = "ga:region"
+            args["metrics"] = "ga:pageviews"
+            args["sort"] = "-ga:pageviews"
+            args["alt"] = "json"
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+	data = {}
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + int(result[1])
+        self._filter_out_long_tail(data, MIN_VIEWS)
+        ga_model.update_sitewide_stats(period_name, "Region", data, period_complete_day)
+
+	try:
+            args = {}
+            args["max-results"] = 100000
+            args["start-date"] = start_date
+            args["end-date"] = end_date
+            args["ids"] = "ga:" + self.profile_id
+
+            args["dimensions"] = "ga:metro"
+            args["metrics"] = "ga:pageviews"
+            args["sort"] = "-ga:pageviews"
+            args["alt"] = "json"
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+
+	data = {}
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + int(result[1])
+        self._filter_out_long_tail(data, MIN_VIEWS)
+        ga_model.update_sitewide_stats(period_name, "Metro", data, period_complete_day)
 
     def _download_stats(self, start_date, end_date, period_name, period_complete_day):
         """ Fetches stats about data downloads """
@@ -524,7 +576,7 @@ class DownloadAnalytics(object):
 
         ga_model.update_sitewide_stats(period_name, "Downloads", data, period_complete_day)
 
-    def _social_stats(self, start_date, end_date, period_name, period_complete_day):
+    def _referral_stats(self, start_date, end_date, period_name, period_complete_day):
         """ Finds out which social sites people are referred from """
 
         try:
@@ -548,6 +600,28 @@ class DownloadAnalytics(object):
                 data[result[0]] = data.get(result[0], 0) + int(result[2])
         self._filter_out_long_tail(data, 3)
         ga_model.update_sitewide_stats(period_name, "Social sources", data, period_complete_day)
+
+	try:
+            args = dict( ids='ga:' + self.profile_id,
+                         metrics='ga:pageviews',
+                         sort='-ga:pageviews',
+                         dimensions="ga:referralPath",
+                         max_results=10000)
+            args['start-date'] = start_date
+            args['end-date'] = end_date
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+        data = {}
+        for result in result_data:
+            if not result[0] == '(not set)':
+                data[result[0]] = data.get(result[0], 0) + int(result[1])
+        self._filter_out_long_tail(data, 3)
+        ga_model.update_sitewide_stats(period_name, "Referral sources", data, period_complete_day)
 
 
     def _os_stats(self, start_date, end_date, period_name, period_complete_day):
@@ -599,10 +673,9 @@ class DownloadAnalytics(object):
             log.exception(e)
             results = dict(url=[])
 
-
         result_data = results.get('rows')
         # e.g. [u'Firefox', u'19.0', u'20']
-
+       
         data = {}
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[2])
@@ -615,6 +688,154 @@ class DownloadAnalytics(object):
             data[key] = data.get(key, 0) + int(result[2])
         self._filter_out_long_tail(data, MIN_VIEWS)
         ga_model.update_sitewide_stats(period_name, "Browser versions", data, period_complete_day)
+
+	try:
+            args = dict( ids='ga:' + self.profile_id,
+                         metrics='ga:pageviews',
+                         sort='-ga:pageviews',
+                         dimensions="ga:browserSize",
+                         max_results=10000)
+
+            args['start-date'] = start_date
+            args['end-date'] = end_date
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+        # e.g. [u'Firefox', u'19.0', u'20']
+
+        data = {}
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + int(result[1])
+        self._filter_out_long_tail(data, MIN_VIEWS)
+        ga_model.update_sitewide_stats(period_name, "Browser sizes", data, period_complete_day)
+
+	try:
+            args = dict( ids='ga:' + self.profile_id,
+                         metrics='ga:pageviews',
+                         sort='-ga:pageviews',
+                         dimensions="ga:deviceCategory",
+                         max_results=10000)
+
+            args['start-date'] = start_date
+            args['end-date'] = end_date
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+        # e.g. [u'Firefox', u'19.0', u'20']
+
+        data = {}
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + int(result[1])
+        self._filter_out_long_tail(data, MIN_VIEWS)
+        ga_model.update_sitewide_stats(period_name, "Device category", data, period_complete_day)
+
+    def _page_stats(self, start_date, end_date, period_name, period_complete_day):
+        """ Information about browsers and browser versions """
+
+        try:
+            args = dict( ids='ga:' + self.profile_id,
+                         metrics='ga:pageviews,ga:avgTimeOnPage',
+                         sort='-ga:pageviews',
+                         dimensions="ga:pagePath",
+                         max_results=10000)
+
+            args['start-date'] = start_date
+            args['end-date'] = end_date
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+        # e.g. [u'Firefox', u'19.0', u'20']
+
+	with open("/tmp/python.log", "a") as mylog:
+            mylog.write("\n%s\n" % result_data)
+        data = {}
+	count = 0
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + int(result[1])
+	    count = count + 1
+	    if count == 25:
+	        break
+
+        self._filter_out_long_tail(data, MIN_VIEWS)
+        ga_model.update_sitewide_stats(period_name, "Page views", data, period_complete_day)
+
+	data = {}
+	count = 0
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + float(result[2])
+	    count = count + 1
+            if count == 25:
+                break
+        self._filter_out_long_tail(data, MIN_VIEWS)
+        ga_model.update_sitewide_stats(period_name, "Page avgTime", data, period_complete_day)
+
+	try:
+            args = dict( ids='ga:' + self.profile_id,
+                         metrics='ga:entrances',
+                         sort='-ga:entrances',
+                         dimensions="ga:landingPagePath",
+                         max_results=10000)
+
+            args['start-date'] = start_date
+            args['end-date'] = end_date
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+        # e.g. [u'Firefox', u'19.0', u'20']
+
+        data = {}
+        count = 0
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + int(result[1])
+            count = count + 1
+            if count == 25:
+                break
+        self._filter_out_long_tail(data, MIN_VIEWS)
+        ga_model.update_sitewide_stats(period_name, "Landing page", data, period_complete_day)
+
+	try:
+            args = dict( ids='ga:' + self.profile_id,
+                         metrics='ga:exits',
+                         sort='-ga:exits',
+                         dimensions="ga:exitPagePath",
+                         max_results=10000)
+
+            args['start-date'] = start_date
+            args['end-date'] = end_date
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+        # e.g. [u'Firefox', u'19.0', u'20']
+
+        data = {}
+        count = 0
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + int(result[1])
+            count = count + 1
+            if count == 25:
+                break
+        self._filter_out_long_tail(data, MIN_VIEWS)
+        ga_model.update_sitewide_stats(period_name, "Exit page", data, period_complete_day)
 
     @classmethod
     def _filter_browser_version(cls, browser, version_str):
