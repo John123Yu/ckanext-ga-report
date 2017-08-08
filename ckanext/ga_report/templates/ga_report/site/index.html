@@ -4,18 +4,17 @@
 {% block title %}Site Usage - {{ super() }}{% endblock %}
 
 {% block header %}
-  <link rel="stylesheet" type="text/css" href="/scripts/vendor/rickshaw.min.css"/>
   <link rel="stylesheet" type="text/css" href="/css/ga_report.css?1"/>
   <script  src="https://code.jquery.com/jquery-1.3.min.js" integrity="sha256-kAGRpEMRXYtIqdaNMGLos9cSlyeVG4YXRltIW68lMAY=" crossorigin="anonymous"></script>
-  <script type="text/javascript" src="/scripts/modernizr-2.6.2.custom.js"></script>
-  <script type="text/javascript" src="/scripts/ckanext_ga_reports.js?1"></script>
-  <script type="text/javascript" src="/scripts/vendor/jquery.sparkline.modified.js"></script>
-  <script type="text/javascript" src="/scripts/rickshaw_ie7_shim.js"></script>
-  <script type="text/javascript" src="/scripts/vendor/d3.v2.js"></script>
-  <script type="text/javascript" src="/scripts/vendor/d3.layout.min.js"></script>
-  <script type="text/javascript" src="/scripts/vendor/rickshaw.min.js"></script>
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+  {% resource 'scripts/scripts/temp.js' %}
+  {% resource 'scripts/scripts/chart.js' %}
+  {% resource 'scripts/scripts/nav.js' %}
+  {% resource 'scripts/css/chart.css' %}
+  {% resource 'scripts/css/nav.css' %}
   {% include "header.html" %}
 {% endblock %}
+
 
 {% block breadcrumb_content %}
     <li><a href="/data/site-usage">Site Analytics</a></li>
@@ -27,32 +26,58 @@
     <h1 class="site_title">Site Usage Analytics</h1>
     <p>The information on this page displays statistics about the usage of the United States Data.gov catalog site, where metadata of open resources are stored.</p>
   </div>
-  <div class="" style="background: #fff;">
+  <div class="tab">
+    <button class="tablinks" onclick="openTab(event, 'total_traffic')">Total Traffic</button>
+    <button class="tablinks" onclick="openTab(event, 'page_views')">Paris</button>
+    <button class="tablinks" onclick="openTab(event, 'page_avgTime')">Tokyo</button>
+    <button class="tablinks" onclick="openTab(event, 'landing_page')">Total Traffic</button>
+    <button class="tablinks" onclick="openTab(event, 'exit_page')">Paris</button>
+    <button class="tablinks" onclick="openTab(event, 'browsers_versions')">Tokyo</button>
+    <button class="tablinks" onclick="openTab(event, 'browswers_names')">Total Traffic</button>
+    <button class="tablinks" onclick="openTab(event, 'browsers_sizes')">Paris</button>
+    <button class="tablinks" onclick="openTab(event, 'device_category')">Tokyo</button>
+    <button class="tablinks" onclick="openTab(event, 'os')">Tokyo</button>
+    <button class="tablinks" onclick="openTab(event, 'os_versions')">Total Traffic</button>
+    <button class="tablinks" onclick="openTab(event, 'social_referrals_totals')">Paris</button>
+    <button class="tablinks" onclick="openTab(event, 'social_networks')">Tokyo</button>
+    <button class="tablinks" onclick="openTab(event, 'languages')">Total Traffic</button>
+    <button class="tablinks" onclick="openTab(event, 'country')">Paris</button>
+    <button class="tablinks" onclick="openTab(event, 'region')">Tokyo</button>
+    <button class="tablinks" onclick="openTab(event, 'metro')">Tokyo</button>
+  </div>
+  <div class="" >
     <div class="enclosing_body col-md-8 col-sm-10">
-      <hr>
-      <h2>Total Traffic</h2>
-      <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
-        <h4 class="ga-reports-heading">Show stats table for:</h4>
-        {{m.month_selector(c.month, c.months, c.day)}}
-      </form>
-      <table class="ga-reports-table table table-condensed table-bordered table-striped">
-        <tr>
-          <th>Name</th>
-          <th class="td-numeric">Value</th>
-        </tr>
-        {% for name, value, graph in c.global_totals %}
-        <tr>
-          <td>{{name}}</td>
-          <td class="td-numeric">{{value}}</td>
-        </tr>
-        {% endfor %}
-      </table>
-      <div class="" id="page_views">
+      <div class="tabcontent" id="total_traffic">
+        <h2>Total Traffic</h2>
+        <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
+          <h4 class="ga-reports-heading">Show stats table for:</h4>
+          {{m.month_selector(c.month, c.months, c.day)}}
+        </form>
+        <table class="ga-reports-table table table-condensed table-bordered table-striped">
+          <tr>
+            <th>Name</th>
+            <th class="td-numeric">Value</th>
+          </tr>
+          {% for name, value in c.global_totals %}
+          <tr>
+            <td>{{name}}</td>
+            <td class="td-numeric">{{value}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="tabcontent" id="page_views">
 	<h2>Page Views / Popular Pages</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<div id="chart1"></div>
+	<script>
+	$(function() {
+	barChart({{c.page_views_chart|safe}},'Most Popular','views',"#chart1",true)
+	});
+	</script>	
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
           <tr>
             <th>Page</th>
@@ -66,7 +91,7 @@
           {% endfor %}
         </table>
       </div>
-      <div class="" id="page_avgTime">
+      <div class="tabcontent" id="page_avgTime">
         <h2>Average Time On Page</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
@@ -85,8 +110,8 @@
           {% endfor %}
         </table>
       </div>
-      <div class="" id="landing_page">
-        <h2>Landing Page Entrances</h2>
+      <div class="tabcontent" id="landing_page">
+        <h2>Landing Page Entrances/ First Page Visited</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
@@ -104,7 +129,45 @@
           {% endfor %}
         </table>
       </div>
-      <div class="" id="exit_page">
+      <div class="tabcontent" id="second_page">
+        <h2>Second Page Visited</h2>
+        <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
+          <h4 class="ga-reports-heading">Show stats table for:</h4>
+          {{m.month_selector(c.month, c.months, c.day)}}
+        </form>
+        <table class="ga-reports-table table table-condensed table-bordered table-striped">
+          <tr>
+            <th>Page</th>
+            <th class="td-numeric">Views</th>
+          </tr>
+          {% for page, views in c.second_page %}
+          <tr>
+            <td>{{page}}</td>
+            <td class="td-numeric">{{views}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="tabcontent" id="third_page">
+        <h2>Third Page Visited</h2>
+        <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
+          <h4 class="ga-reports-heading">Show stats table for:</h4>
+          {{m.month_selector(c.month, c.months, c.day)}}
+        </form>
+        <table class="ga-reports-table table table-condensed table-bordered table-striped">
+          <tr>
+            <th>Page</th>
+            <th class="td-numeric">Views</th>
+          </tr>
+          {% for page, views in c.third_page %}
+          <tr>
+            <td>{{page}}</td>
+            <td class="td-numeric">{{views}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="tabcontent" id="exit_page">
         <h2>Exit Page Exits</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
@@ -123,6 +186,25 @@
           {% endfor %}
         </table>
       </div>
+      <div class="tabcontent" id="time_on_page">
+        <h2>Total Time On Page</h2>
+        <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
+          <h4 class="ga-reports-heading">Show stats table for:</h4>
+          {{m.month_selector(c.month, c.months, c.day)}}
+        </form>
+        <table class="ga-reports-table table table-condensed table-bordered table-striped">
+          <tr>
+            <th>Page</th>
+            <th class="td-numeric">Time(s)</th>
+          </tr>
+          {% for page, timeOn in c.third_page %}
+          <tr>
+            <td>{{page}}</td>
+            <td class="td-numeric">{{timeOn}}</td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
       {# <div class="" id="browsers_versions">
         <hr/>
 	<h2>User Browser Versions</h2>
@@ -133,7 +215,7 @@
         </form>
         {{m.stat_table(c.browser_versions)}}
       </div>#}
-      <div class="" id="browsers_names">
+      <div class="tabcontent" id="browsers_names">
         <hr/>
 	<h2>User Browser Names</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
@@ -142,7 +224,7 @@
         </form>
         {{m.stat_table(c.browsers)}}
       </div>
-      <div class="" id="browser_sizes">
+      <div class="tabcontent" id="browser_sizes">
         <hr/>
         <h2>User Browser Sizes</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
@@ -151,7 +233,7 @@
         </form>
         {{m.stat_table(c.browser_sizes)}}
       </div>
-      <div class="" id="device_category">
+      <div class="tabcontent" id="device_category">
         <hr/>
         <h2>User Devices</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
@@ -160,7 +242,7 @@
         </form>
         {{m.stat_table(c.device_category)}}
       </div>
-      <div class="" id="os">
+      <div class="tabcontent" id="os">
         <hr/>
 	<h2>User Operating Systems</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
@@ -168,6 +250,24 @@
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
         {{m.stat_table(c.os)}}
+      </div>
+      <div class="tabcontent" id="os">
+        <hr/>
+        <h2>Mobile Brands</h2>
+        <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
+          <h4 class="ga-reports-heading">Show stats table for:</h4>
+          {{m.month_selector(c.month, c.months, c.day)}}
+        </form>
+        {{m.stat_table(c.mobile_brands)}}
+      </div>
+      <div class="tabcontent" id="os">
+        <hr/>
+        <h2>Mobile devices</h2>
+        <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
+          <h4 class="ga-reports-heading">Show stats table for:</h4>
+          {{m.month_selector(c.month, c.months, c.day)}}
+        </form>
+        {{m.stat_table(c.mobile_devices)}}
       </div>
       {# <div class="" id="os_versions">
         <hr/>
@@ -177,8 +277,8 @@
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
           {{m.stat_table(c.os_versions)}}
-      </div>
-      <div class="" id="social_referrals_totals">
+      </div> #}
+      <div class="tabcontent" id="social_referrals_totals">
 	<h2>Social Referrals Totals</h2>
         <p>*Number of visits that were referred from social networks</p>
         <form class="form-inline" action=""{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}"" method="get">
@@ -186,8 +286,8 @@
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
           {{m.social_table(c.social_referrer_totals)}}
-      </div> #}
-      <div class="" id="Referral Paths">
+      </div> 
+   {#   <div class="" id="Referral Paths">
         <hr/>
         <h2>Referral Paths</h2>
         <p>Percentage of visits that were referred from these social networks</p>
@@ -207,8 +307,8 @@
           </tr>
           {% endfor %}
       </table>
-      </div>
-      <div class="" id="social_networks">
+      </div> #}
+      <div class="tabcontent" id="social_networks">
         <hr/>
 	<h2>Social Networks Referal Percentages</h2>
         <p>Percentage of visits that were referred from these social networks</p>
@@ -218,7 +318,7 @@
         </form>
           {{m.stat_table(c.social_networks, 'Visits')}}
       </div>
-      <div class="" id="languages">
+      <div class="tabcontent" id="languages">
         <hr/>
 	<h2>Languages</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
@@ -227,7 +327,7 @@
         </form>
           {{m.stat_table(c.languages)}}
       </div>
-      <div class="" id="country">
+      <div class="tabcontent" id="country">
         <hr/>
 	<h2>Country</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
@@ -236,7 +336,7 @@
         </form>
         {{m.stat_table(c.country)}}
       </div>
-      <div class="" id="Region">
+      <div class="tabcontent" id="Region">
         <hr/>
         <h2>Region</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
@@ -245,7 +345,7 @@
         </form>
         {{m.stat_table(c.region)}}
       </div>
-      <div class="" id="metro">
+      <div class="tabcontent" id="metro">
         <hr/>
         <h2>Metro</h2>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
@@ -256,14 +356,6 @@
       </div>
     </div>
   </div>
-   {# <script type="text/javascript">
-      $(function() {
-        CKAN.GA_Reports.bind_sparklines();
-        CKAN.GA_Reports.bind_sidebar();
-        CKAN.GA_Reports.bind_month_selector();
-      });
-    </script> #}
-
 {% endblock %}
 
 {% block secondary_content %}
