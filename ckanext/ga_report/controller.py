@@ -126,25 +126,13 @@ class GaReport(BaseController):
             return key, val
 
         # Query historic values for sparkline rendering
-        sparkline_query = model.Session.query(GA_Stat)\
-                .filter(GA_Stat.stat_name=='Totals')\
-                .order_by(GA_Stat.period_name)
-        sparkline_data = {}
-        for x in sparkline_query:
-            sparkline_data[x.key] = sparkline_data.get(x.key,[])
-            key, val = clean_key(x.key,float(x.value))
-            tooltip = '%s: %s' % (_get_month_name(x.period_name), val)
-            sparkline_data[x.key].append( (tooltip,x.value) )
         # Trim the latest month, as it looks like a huge dropoff
-        for key in sparkline_data:
-            sparkline_data[key] = sparkline_data[key][:-1]
 
         c.global_totals = []
         if c.month:
             for e in entries:
                 key, val = clean_key(e.key, e.value)
-                sparkline = sparkline_data[e.key]
-                c.global_totals.append((key, val, sparkline))
+                c.global_totals.append((key, val))
         else:
             d = collections.defaultdict(list)
             for e in entries:
@@ -154,10 +142,9 @@ class GaReport(BaseController):
                     v = sum(v)
                 else:
                     v = float(sum(v))/float(len(v))
-                sparkline = sparkline_data[k]
                 key, val = clean_key(k,v)
 
-                c.global_totals.append((key, val, sparkline))
+                c.global_totals.append((key, val))
         # Sort the global totals into a more pleasant order
         def sort_func(x):
             key = x[0]
@@ -183,7 +170,12 @@ class GaReport(BaseController):
 	    'Page views': 'page_views',
 	    'Page avgTime': 'page_avgTime',
 	    'Landing page': 'landing_page',
-	    'Exit page' : 'exit_page'
+	    'Second page': 'second_page',
+	    'Third page': 'third_page',
+	    'Exit page' : 'exit_page',
+	    'Time on page': 'time_on_page',
+	    'Mobile brands': 'mobile_brands',
+	    'Mobile devices': 'mobile_devices'
         }
 
         def shorten_name(name, length=60):
@@ -192,6 +184,12 @@ class GaReport(BaseController):
         def fill_out_url(url):
             import urlparse
             return urlparse.urljoin(g.site_url, url)
+
+	def convert_for_chart(arg):
+	    newArray = []
+	    newArray.append(arg[1])
+	    newArray.append(arg[0])
+	    return newArray
 
         c.social_referrer_totals, c.social_referrers = [], []
         q = model.Session.query(GA_ReferralStat)
@@ -216,8 +214,8 @@ class GaReport(BaseController):
             # Buffer the tabular data
             if c.month:
                 entries = []
-                q = q.filter(GA_Stat.period_name==c.month).\
-                          order_by('ga_stat.value::int desc')
+                q = q.filter(GA_Stat.period_name==c.month)\
+                         # order_by('ga_stat.value')
             d = collections.defaultdict(int)
             for e in q.all():
                 d[e.key] += float(e.value)
@@ -225,7 +223,9 @@ class GaReport(BaseController):
             for key, val in d.iteritems():
                 entries.append((key,val,))
             entries = sorted(entries, key=operator.itemgetter(1), reverse=True)
-
+	    
+ 	    chart_entries = map(convert_for_chart, entries)[:15]
+	    setattr(c, v+'_chart', json.dumps(chart_entries))
             # Run a query on all months to gather graph data
             graph_query = model.Session.query(GA_Stat).\
                 filter(GA_Stat.stat_name==k).\
@@ -246,14 +246,15 @@ class GaReport(BaseController):
             # Get the total for each set of values and then set the value as
             # a percentage of the total
             if k == 'Social sources':
-                total = sum([x for n,x,graph in c.global_totals if n == 'Total visits'])
+                total = sum([x for n,x in c.global_totals if n == 'Total visits'])
 		setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
-	    elif k in ('Page views','Page avgTime','Landing page','Exit page'):
+	    elif k in ('Page views','Page avgTime','Landing page','Exit page','Second page', 'Third page', 'Time on page'):
 		setattr(c, v, [(k,v) for k,v in entries ])
             else:
                 total = sum([num for _,num in entries])
-                setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
-
+                setattr(c, v, [json.dumps(k,_percent(v,total)) for k,v in entries ])
+	with open("/tmp/python.log", "a") as mylog:
+    	    mylog.write("\n%s\n" % c)
         return render('ga_report/site/index.html')
 
 
