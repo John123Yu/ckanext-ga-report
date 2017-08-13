@@ -190,6 +190,12 @@ class GaReport(BaseController):
 	    newArray.append(arg[1])
 	    newArray.append(arg[0])
 	    return newArray
+	
+	def convert_for_pie_chart(arg):
+	    newArray = []
+	    newArray.append(float(_percent(arg[0],total).strip('%')))
+	    newArray.append(arg[1])
+	    return newArray
 
         c.social_referrer_totals, c.social_referrers = [], []
         q = model.Session.query(GA_ReferralStat)
@@ -223,26 +229,15 @@ class GaReport(BaseController):
             for key, val in d.iteritems():
                 entries.append((key,val,))
             entries = sorted(entries, key=operator.itemgetter(1), reverse=True)
-	    
+	   
+	    #convert data to be used for bar and pie charts 
  	    chart_entries = map(convert_for_chart, entries)[:15]
 	    setattr(c, v+'_chart', json.dumps(chart_entries))
-            # Run a query on all months to gather graph data
-            graph_query = model.Session.query(GA_Stat).\
-                filter(GA_Stat.stat_name==k).\
-                order_by(GA_Stat.period_name)
-            graph_dict = {}
-            for stat in graph_query:
-                graph_dict[ stat.key ] = graph_dict.get(stat.key,{
-                    'name':stat.key,
-                    'raw': {}
-                    })
-                graph_dict[ stat.key ]['raw'][stat.period_name] = float(stat.value)
-            stats_in_table = [x[0] for x in entries]
-            stats_not_in_table = set(graph_dict.keys()) - set(stats_in_table)
-            stats = stats_in_table + sorted(list(stats_not_in_table))
-            graph = [graph_dict[x] for x in stats]
-            setattr(c, v+'_graph', json.dumps( _to_rickshaw(graph,percentageMode=True) ))
-
+	    if k not in ('Social sources', 'Page views', 'Page avgTime', 'Landing page', 'Exit page', 'Second page', 'Third page', 'Time on page'):
+		total = sum([num for _,num in entries])
+		pie_chart_entries = map(convert_for_pie_chart, chart_entries)[:10]
+		setattr(c,v+'_chart',json.dumps(pie_chart_entries))
+	
             # Get the total for each set of values and then set the value as
             # a percentage of the total
             if k == 'Social sources':
@@ -252,7 +247,7 @@ class GaReport(BaseController):
 		setattr(c, v, [(k,v) for k,v in entries ])
             else:
                 total = sum([num for _,num in entries])
-                setattr(c, v, [json.dumps(k,_percent(v,total)) for k,v in entries ])
+                setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
 	with open("/tmp/python.log", "a") as mylog:
     	    mylog.write("\n%s\n" % c)
         return render('ga_report/site/index.html')

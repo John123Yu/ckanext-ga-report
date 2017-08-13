@@ -259,6 +259,12 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<div class="charts" id="chart9"></div>
+        <script>
+        $(function() {
+          pieChart({{c.browsers_chart|safe}},"#chart9")
+        });
+        </script>
         {{m.stat_table(c.browsers)}}
       </div>
       <div class="tabcontent" id="browser_sizes">
