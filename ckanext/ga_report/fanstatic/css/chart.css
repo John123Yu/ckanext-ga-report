@@ -17,10 +17,9 @@
 
 .barchart-tooltip {
   position: absolute;
-  text-align: center;
+  text-align: left;
   padding: 10px 15px;
   font-size: 15px;
-  font-weight: 600;
   background: rgb(255, 236, 96);
   color: black;
   border-radius: 4px;
@@ -54,3 +53,30 @@ table {
 .form-inline {
   margin-left: 2.5%;
 }
+
+.legend {
+  font-size: 12px;
+}
+.pie-chart-tooltip {
+  background: rgb(255, 236, 96);
+  box-shadow: 0 0 5px #999999;
+  color: black;
+  display: none;
+  font-size: 15px;
+  left: 130px;
+  padding: 10px;
+  position: absolute;
+  text-align: center;
+  top: 95px;
+  width: 100px;
+  z-index: 10;
+}
+
+rect.disabled {                              
+  fill: transparent !important;              
+} 
+                                           
+rect {
+  stroke-width: 2;
+}
+

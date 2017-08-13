@@ -11,11 +11,11 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 		.attr("class", "barchart-tooltip")
 		.style("opacity", 0);
 
-		var margin = {top: 10, right: 20, bottom: longestEntry[1].length * 3, left: 80},
+		var margin = {top: 10, right: 20, bottom: longestEntry[1].length * 6.04, left: 80},
 			width = 730 - margin.left - margin.right,
-			height = longestEntry[1].length * 3 + 50;
+			height = 500;
 
-		var x = d3.scaleBand().range([0, dataArray.length * (width/dataArray.length) + 10]);
+		var x = d3.scaleBand().range([0, dataArray.length * (width/dataArray.length)]);
 		var y = d3.scaleLinear().range([height, 0]);
 
 		var maxValue = d3.max(dataArray, function(d) { return d[0]; })
@@ -34,8 +34,8 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 		    .enter().append("rect")
 		    .attr("class", "bar")
 		    .attr("height", function(d, i) {return (d[0] * (height/maxValue))})
-		    .attr("width","30")
-		    .attr("x", function(d) {return x(d[1]) + 10;})
+		    .attr("width","32")
+		    .attr("x", function(d) {return x(d[1]) + 6;})
 		    .attr("y", function(d, i) {return height - (d[0] * (height/maxValue))})
 		    .style("opacity", function(d, i) {return ((2)*d[0]/maxValue) + .075;})
 		    .on("mouseover", function(d) {
@@ -46,7 +46,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 			.style("left", (80 - d[1].length/2.25) + "%")
 			.style("top", "5%")
 
-			div.html(d[1])
+			div.html(d[1] + "<br>" + yAxis + ": " +  d[0])
 		    })
 		    .on("mouseout", function(d) {
 			div.transition()
@@ -57,15 +57,15 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 			window.open("https://" + d[1], "_blank")
 		    })
 
-		svg.selectAll("text")
-		    .data(dataArray)
-		    .enter().append("text")
-		    .text(function(d) {return d[0];})
-		    .style("font-size", "12px")
-		    .style("fill", "rgb(168, 78, 0)")
-		    .style("font-weight", "bold")
-		    .attr("x", function(d) {return x(d[1]) - adjust_label + 2  + 35/(d[0].toString().length);})
-		    .attr("y", function(d, i) {return height - 5 - (d[0] * (height/maxValue))});
+	//	svg.selectAll("text")
+	//	    .data(dataArray)
+	//	    .enter().append("text")
+	//	    .text(function(d) {return d[0];})
+	//	    .style("font-size", "12px")
+	//	    .style("fill", "rgb(168, 78, 0)")
+	//	    .style("font-weight", "bold")
+	//	    .attr("x", function(d) {return x(d[1]) - adjust_label + 2  + 35/(d[0].toString().length);})
+	//	    .attr("y", function(d, i) {return height - 5 - (d[0] * (height/maxValue))});
 
 		// AXIS
 		svg.append("g")
@@ -90,6 +90,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
                                 .style("position", "fixed")
                                 .style("left", (75 - d[1].length/3) + "%")
                                 .style("top", "5%")
+				//.style('top', (d3.event.layerY + 10) + 'px')
                                 .style("width", d[1].length)
 
                                 div.html(d[1])
@@ -97,7 +98,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
                         })
                         .on("mouseout", function(d) {
                                 div.transition()
-                                .duration(500)
+                                .duration(200)
                                 .style("opacity", 0);
                         })
                         .on("click", function(d) {
@@ -133,6 +134,13 @@ var pieChart = function(dataArray, chart) {
 	dataArray.forEach(function(d) {
 	    d[2] = true;                        
 	});
+	
+	var sum_of_values = 0;
+	for(var i=0; i<dataArray.length; i++){
+		sum_of_values += dataArray[i][0];
+	}
+	var remainingPercentage = (100 - sum_of_values).toFixed(2);
+	dataArray.push([remainingPercentage, "Other", true])
 
 	var width = 720;
 	var height = 360;
@@ -170,7 +178,7 @@ var pieChart = function(dataArray, chart) {
 	    return (d[2]) ? d[0] : 0;
 	  }));
 	  var percent = d.data[0];
-	  tooltip.select('.label').html(d.data[1]);
+	  tooltip.select('.label1').html(d.data[1]);
 	  tooltip.select('.percent').html(percent + '%');
 	  tooltip.style('display', 'block');
 	});
@@ -248,7 +256,7 @@ var pieChart = function(dataArray, chart) {
 	  .attr('class', 'pie-chart-tooltip');               
 
 	tooltip.append('div')                        
-	  .attr('class', 'label');                  
+	  .attr('class', 'label1');                  
 	tooltip.append('div')                        
 	  .attr('class', 'percent');
 }

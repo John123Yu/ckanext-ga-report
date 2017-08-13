@@ -233,9 +233,10 @@ class GaReport(BaseController):
 	    #convert data to be used for bar and pie charts 
  	    chart_entries = map(convert_for_chart, entries)[:15]
 	    setattr(c, v+'_chart', json.dumps(chart_entries))
+	
 	    if k not in ('Social sources', 'Page views', 'Page avgTime', 'Landing page', 'Exit page', 'Second page', 'Third page', 'Time on page'):
 		total = sum([num for _,num in entries])
-		pie_chart_entries = map(convert_for_pie_chart, chart_entries)[:10]
+		pie_chart_entries = map(convert_for_pie_chart, chart_entries)
 		setattr(c,v+'_chart',json.dumps(pie_chart_entries))
 	
             # Get the total for each set of values and then set the value as
@@ -248,8 +249,7 @@ class GaReport(BaseController):
             else:
                 total = sum([num for _,num in entries])
                 setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
-	with open("/tmp/python.log", "a") as mylog:
-    	    mylog.write("\n%s\n" % c)
+
         return render('ga_report/site/index.html')
 
 

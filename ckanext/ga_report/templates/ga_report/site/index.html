@@ -254,11 +254,12 @@
         {{m.stat_table(c.browser_versions)}}
       </div>#}
       <div class="tabcontent" id="browsers_names">
-	<h1 class="titles">User Browser Names</h1>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<h1 class="titles">User Browser Names</h1>
+	<br>
 	<div class="charts" id="chart9"></div>
         <script>
         $(function() {
@@ -268,43 +269,78 @@
         {{m.stat_table(c.browsers)}}
       </div>
       <div class="tabcontent" id="browser_sizes">
-        <h1 class="titles">User Browser/Screen Sizes</h1>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<h1 class="titles">User Browser/Screen Sizes</h1>
+	<br>
+	<div class="charts" id="chart10"></div>
+        <script>
+        $(function() {
+          pieChart({{c.browser_sizes_chart|safe}},"#chart10")
+        });
+        </script>
         {{m.stat_table(c.browser_sizes)}}
       </div>
       <div class="tabcontent" id="device_category">
-        <h1 class="titles">User Devices</h1>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<h1 class="titles">User Devices</h1>
+	<br>
+        <div class="charts" id="chart18"></div>
+        <script>
+        $(function() {
+          pieChart({{c.device_category_chart|safe}},"#chart18")
+        });
+        </script>
         {{m.stat_table(c.device_category)}}
       </div>
       <div class="tabcontent" id="os">
-	<h1 class="titles">User Operating Systems</h1>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<h1 class="titles">User Operating Systems</h1>
+	<br>
+        <div class="charts" id="chart11"></div>
+        <script>
+        $(function() {
+          pieChart({{c.os_chart|safe}},"#chart11")
+        });
+        </script>
         {{m.stat_table(c.os)}}
       </div>
-      <div class="tabcontent" id="os">
-        <h1 class="titles">Mobile Brands</h1>
+      <div class="tabcontent" id="mobile_brands">
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<h1 class="titles">Mobile Brands</h1>
+	<br>
+        <div class="charts" id="chart12"></div>
+        <script>
+        $(function() {
+          pieChart({{c.mobile_brands_chart|safe}},"#chart12")
+        });
+        </script>
         {{m.stat_table(c.mobile_brands)}}
       </div>
-      <div class="tabcontent" id="os">
-        <h1 class="titles">Mobile devices</h1>
+      <div class="tabcontent" id="mobile_devices">
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<h1 class="titles">Mobile devices</h1>
+	<br>
+        <div class="charts" id="chart13"></div>
+        <script>
+        $(function() {
+          pieChart({{c.mobile_devices_chart|safe}},"#chart13")
+        });
+        </script>
         {{m.stat_table(c.mobile_devices)}}
       </div>
       {# <div class="" id="os_versions">
@@ -360,35 +396,63 @@
           {{m.stat_table(c.social_networks, 'Visits')}}
       </div> 
       <div class="tabcontent" id="languages">
-	<h1>Languages</h1>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-          {{m.stat_table(c.languages)}}
+	<h1>Languages</h1>
+	<br>
+        <div class="charts" id="chart14"></div>
+        <script>
+        $(function() {
+          pieChart({{c.languages_chart|safe}},"#chart14")
+        });
+        </script>
+        {{m.stat_table(c.languages)}}
       </div>
       <div class="tabcontent" id="country">
-	<h1 class="titles">Country</h1>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<h1 class="titles">Country</h1>
+	<br>
+        <div class="charts" id="chart15"></div>
+        <script>
+        $(function() {
+          pieChart({{c.country_chart|safe}},"#chart15")
+        });
+        </script>
         {{m.stat_table(c.country)}}
       </div>
       <div class="tabcontent" id="region">
-        <h1 class="titles">Region</h1>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<h1 class="titles">Region</h1>
+	<br>
+        <div class="charts" id="chart16"></div>
+        <script>
+        $(function() {
+          pieChart({{c.region_chart|safe}},"#chart16")
+        });
+        </script>
         {{m.stat_table(c.region)}}
       </div>
       <div class="tabcontent" id="metro">
-        <h1 class="titles">Metro</h1>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
+	<h1 class="titles">Metro</h1>
+	<br>
+        <div class="charts" id="chart17"></div>
+        <script>
+        $(function() {
+          pieChart({{c.metro_chart|safe}},"#chart17")
+        });
+        </script>
         {{m.stat_table(c.metro)}}
       </div>
     </div>
