@@ -22,33 +22,53 @@
 {% endblock %}
 
 {% block primary_content %}
-  <div class="col-sm-12 top_row">
-    <h1 class="site_title">Site Usage Analytics</h1>
-    <p>The information on this page displays Google Analytic statistics about the usage of the United States Data.gov site, where metadata of open resources are stored.</p>
-  </div>
-  <div class="tab">
-    <button class="tablinks"  onclick="openTab(event, 'total_traffic')">Total Traffic</button>
-    <button class="tablinks" id="defaultOpen" onclick="openTab(event, 'page_views', 'chart1')">Page Views</button>
-    <button class="tablinks" onclick="openTab(event, 'page_avgTime', 'chart2')">Average Time on Page</button>
-    <button class="tablinks" onclick="openTab(event, 'time_on_page', 'chart6')">Total Time on Page</button>
-    <button class="tablinks" onclick="openTab(event, 'landing_page','chart3')">Landing Pages</button>
-    <button class="tablinks" onclick="openTab(event, 'second_page','chart4')">Second Pages</button>
-    <button class="tablinks" onclick="openTab(event, 'third_page','chart5')">Third Pages</button>
-    <button class="tablinks" onclick="openTab(event, 'exit_page','chart7')">Exit Pages</button>
-    <button class="tablinks" onclick="openTab(event, 'browsers_names')">Browswer Names</button>
-    <button class="tablinks" onclick="openTab(event, 'browser_sizes')">Screen Sizes</button>
-    <button class="tablinks" onclick="openTab(event, 'device_category')">Device Category</button>
-    <button class="tablinks" onclick="openTab(event, 'os')">Operating Systems</button>
-    <button class="tablinks" onclick="openTab(event, 'social_networks')">Social Networks</button>
-    <button class="tablinks" onclick="openTab(event, 'languages')">Languages</button>
-    <button class="tablinks" onclick="openTab(event, 'country')">Country</button>
-    <button class="tablinks" onclick="openTab(event, 'region')">Region</button>
-    <button class="tablinks" onclick="openTab(event, 'metro')">Metro</button>
+  <div class="navbar">
+    <div class="navbar-inner">
+      <ul class="nav">
+        <li><a class="selection" id="defaultOpen" onclick="openTab(event, 'total_traffic')">Total Traffic</a></li>
+	<li class="divider-vertical"></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle selection" data-toggle="dropdown">Page Statistics</a>
+    	  <ul class="dropdown-menu">
+    	    <li><a onclick="openTab(event, 'page_views', 'chart1')">Most Popular Pages</a></li>
+    	    <li><a onclick="openTab(event, 'page_avgTime', 'chart2')">Average Time on Page</a></li>
+    	    <li><a onclick="openTab(event, 'time_on_page', 'chart6')">Total Time on Page</a></li>
+    	    <li><a onclick="openTab(event, 'landing_page','chart3')">Landing Pages</a></li>
+    	    <li><a onclick="openTab(event, 'second_page','chart4')">Page Path Level 1</a></li>
+    	    <li><a onclick="openTab(event, 'third_page','chart5')">Page Path Level 2</a></li>
+    	    <li><a onclick="openTab(event, 'exit_page','chart7')">Exit Pages</a></li>
+    	  </ul>
+    	</li>
+	<li class="divider-vertical"></li>
+        <li class="dropdown">
+    	  <a href="#" class="dropdown-toggle selection" data-toggle="dropdown">Device Statistics</a>
+    	  <ul class="dropdown-menu">
+    	    <li><a onclick="openTab(event, 'browsers_names')">Browswers</a></li>
+    	    <li><a onclick="openTab(event, 'browser_sizes')">Screen Sizes</a></li>
+    	    <li><a onclick="openTab(event, 'device_category')">User Devices</a></li>
+    	    <li><a onclick="openTab(event, 'os')">User Operating Systems</a></li>
+    	  </ul>
+        </li>
+	<li class="divider-vertical"></li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle selection" data-toggle="dropdown">Location Statistics</a>
+      	  <ul class="dropdown-menu">
+    	    <li><a onclick="openTab(event, 'languages')">Languages</a></li>
+    	    <li><a onclick="openTab(event, 'country')">Country</a></li>
+    	    <li><a onclick="openTab(event, 'region')">Region</a></li>
+    	    <li><a onclick="openTab(event, 'metro')">Metro</a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
   </div>
   <div class="" >
     <div class="enclosing_body col-md-8 col-sm-10">
       <div class="tabcontent" id="total_traffic">
-        <h1 class="titles">Total Traffic</h1>
+	<div class="col-sm-12 top_row">
+          <h1 class="site_title">Google Analytics</h1>
+          <p>This page displays Google Analytics for data.gov and catalog.data.gov</p>
+        </div>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
@@ -71,11 +91,10 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Top Pages by Page Views</h1>
 	<div class="charts" id="chart1"></div>
 	<script>
 	$(function() {
-	  barChart({{c.page_views_chart|safe}},'Most Popular','views',"#chart1",true)
+	  barChart({{c.page_views_chart|safe}},'Most Popular Pages','views',"#chart1",true)
 	});
 	</script>
 	<br>	
@@ -97,11 +116,10 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-        <h1 class="titles">Highest Average Time On Page</h1>
 	<div class="charts" id="chart2"></div>
         <script>
         $(function() {
-          barChart({{c.page_avgTime_chart|safe}},'Most Popular','seconds',"#chart2",true)
+          barChart({{c.page_avgTime_chart|safe}},'Average Time on Page','seconds',"#chart2",true)
         });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -122,11 +140,10 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-        <h1 class="titles">First Page Visited</h1>
         <div class="charts" id="chart3"></div>
         <script>
         $(function() {
-          barChart({{c.landing_page_chart|safe}},'Most Popular','entrances',"#chart3",true)
+          barChart({{c.landing_page_chart|safe}},'Landing Pages','entrances',"#chart3",true)
         });
 	</script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -147,12 +164,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Second Page Visited</h1>
 	<div class="charts" id="chart4"></div>
 	<h4>* Data shows top pages for pages that were the second page to be visited during a session</h4>
         <script>
         $(function() {
-          barChart({{c.second_page_chart|safe}},'Most Popular','entrances',"#chart4",true)
+          barChart({{c.second_page_chart|safe}},'Page Path Level 1','entrances',"#chart4",true)
         });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -173,12 +189,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Third Page Visited</h1>
 	<div class="charts" id="chart5"></div>
         <h4>* Data shows top pages for pages that were the third page to be visited during a session</h4>	
 	<script>
         $(function() {
-          barChart({{c.third_page_chart|safe}},'Most Popular','entrances',"#chart5",true)
+          barChart({{c.third_page_chart|safe}},'Page Path Level 2','entrances',"#chart5",true)
         });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -199,11 +214,10 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Exit Page Exits</h1>
 	<div class="charts" id="chart7"></div>
         <script>
         $(function() {
-          barChart({{c.exit_page_chart|safe}},'Exit page','exits',"#chart7",true)
+          barChart({{c.exit_page_chart|safe}},'Exit Pages','exits',"#chart7",true)
         });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -224,11 +238,10 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Total Time On Page</h1>
 	<div class="charts" id="chart6"></div>
 	<script>
         $(function() {
-          barChart({{c.time_on_page_chart|safe}},'Time on page','seconds',"#chart6",true)
+          barChart({{c.time_on_page_chart|safe}},'Total Time on Page','seconds',"#chart6",true)
         });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -258,12 +271,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">User Browser Names</h1>
 	<br>
 	<div class="charts" id="chart9"></div>
         <script>
         $(function() {
-          pieChart({{c.browsers_chart|safe}},"#chart9")
+          pieChart({{c.browsers_chart|safe}},"#chart9", "User Browsers")
         });
         </script>
         {{m.stat_table(c.browsers)}}
@@ -273,12 +285,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">User Browser/Screen Sizes</h1>
 	<br>
 	<div class="charts" id="chart10"></div>
         <script>
         $(function() {
-          pieChart({{c.browser_sizes_chart|safe}},"#chart10")
+          pieChart({{c.browser_sizes_chart|safe}},"#chart10", "User Screen Sizes")
         });
         </script>
         {{m.stat_table(c.browser_sizes)}}
@@ -288,12 +299,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">User Devices</h1>
 	<br>
         <div class="charts" id="chart18"></div>
         <script>
         $(function() {
-          pieChart({{c.device_category_chart|safe}},"#chart18")
+          pieChart({{c.device_category_chart|safe}},"#chart18", "User Devices")
         });
         </script>
         {{m.stat_table(c.device_category)}}
@@ -303,12 +313,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">User Operating Systems</h1>
 	<br>
         <div class="charts" id="chart11"></div>
         <script>
         $(function() {
-          pieChart({{c.os_chart|safe}},"#chart11")
+          pieChart({{c.os_chart|safe}},"#chart11", "User Operating Systems")
         });
         </script>
         {{m.stat_table(c.os)}}
@@ -318,12 +327,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Mobile Brands</h1>
 	<br>
         <div class="charts" id="chart12"></div>
         <script>
         $(function() {
-          pieChart({{c.mobile_brands_chart|safe}},"#chart12")
+          pieChart({{c.mobile_brands_chart|safe}},"#chart12", "User Mobile Brands")
         });
         </script>
         {{m.stat_table(c.mobile_brands)}}
@@ -333,12 +341,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Mobile devices</h1>
 	<br>
         <div class="charts" id="chart13"></div>
         <script>
         $(function() {
-          pieChart({{c.mobile_devices_chart|safe}},"#chart13")
+          pieChart({{c.mobile_devices_chart|safe}},"#chart13", "User Mobile Devices")
         });
         </script>
         {{m.stat_table(c.mobile_devices)}}
@@ -385,7 +392,7 @@
           </tr>
           {% endfor %}
       </table>
-      </div> #} 
+      </div>  
       <div class="tabcontent" id="social_networks">
 	<h1 class="titles">Social Networks Referal Percentages</h1>
         <p>Percentage of visits that were referred from these social networks</p>
@@ -394,18 +401,17 @@
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
           {{m.stat_table(c.social_networks, 'Visits')}}
-      </div> 
+      </div> #}
       <div class="tabcontent" id="languages">
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1>Languages</h1>
 	<br>
         <div class="charts" id="chart14"></div>
         <script>
         $(function() {
-          pieChart({{c.languages_chart|safe}},"#chart14")
+          pieChart({{c.languages_chart|safe}},"#chart14", "Languages")
         });
         </script>
         {{m.stat_table(c.languages)}}
@@ -415,12 +421,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Country</h1>
 	<br>
         <div class="charts" id="chart15"></div>
         <script>
         $(function() {
-          pieChart({{c.country_chart|safe}},"#chart15")
+          pieChart({{c.country_chart|safe}},"#chart15", "Country")
         });
         </script>
         {{m.stat_table(c.country)}}
@@ -430,12 +435,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Region</h1>
 	<br>
         <div class="charts" id="chart16"></div>
         <script>
         $(function() {
-          pieChart({{c.region_chart|safe}},"#chart16")
+          pieChart({{c.region_chart|safe}},"#chart16", "Region")
         });
         </script>
         {{m.stat_table(c.region)}}
@@ -445,12 +449,11 @@
           <h4 class="ga-reports-heading">Show stats table for:</h4>
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
-	<h1 class="titles">Metro</h1>
 	<br>
         <div class="charts" id="chart17"></div>
         <script>
         $(function() {
-          pieChart({{c.metro_chart|safe}},"#chart17")
+          pieChart({{c.metro_chart|safe}},"#chart17", "Metro")
         });
         </script>
         {{m.stat_table(c.metro)}}

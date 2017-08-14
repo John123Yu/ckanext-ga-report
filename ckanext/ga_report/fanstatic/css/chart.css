@@ -1,5 +1,4 @@
 .bar {
-  fill: #4679B2;
   stroke: black;
   stroke-width: 1;
 }
@@ -32,7 +31,6 @@
 
 .enclosing_body {
   padding: 0px !important;
-  background: rgb(248, 248, 248);
   border-left: .5px solid rgb(218, 218, 218);
 }
 
@@ -40,10 +38,6 @@
   margin-left: 30%;
   margin-bottom: 0px !important;
   text-decoration: underline;
-}
-.col-sm-12 {
-  background: rgb(248, 248, 248);
-  border-left: 1px solid rgb(218, 218, 218);
 }
 
 table {
@@ -77,6 +71,15 @@ rect.disabled {
 } 
                                            
 rect {
+  cursor:pointer;
   stroke-width: 2;
 }
 
+.x-axis-label {
+  cursor: pointer;
+  fill: rgb(41, 69, 99);
+}
+
+.x-axis-label:hover {
+  text-decoration: underline;
+}

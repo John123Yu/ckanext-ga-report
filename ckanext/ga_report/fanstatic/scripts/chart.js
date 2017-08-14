@@ -7,13 +7,15 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 	dataArray = dataArray.sort(function(a, b){return b[0] - a[0];});
 	dataArray = dataArray.map(function(item) {item[0] = Math.round(item[0]); return item;})
 
+	var color = d3.scaleOrdinal(d3.schemeCategory20);
+
 		var div = d3.select(chart).append("div")
 		.attr("class", "barchart-tooltip")
 		.style("opacity", 0);
 
-		var margin = {top: 10, right: 20, bottom: longestEntry[1].length * 6.04, left: 80},
+		var margin = {top: 30, right: 20, bottom: longestEntry[1].length * 6.04, left: 80},
 			width = 730 - margin.left - margin.right,
-			height = 500;
+			height = 450;
 
 		var x = d3.scaleBand().range([0, dataArray.length * (width/dataArray.length)]);
 		var y = d3.scaleLinear().range([height, 0]);
@@ -35,9 +37,11 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 		    .attr("class", "bar")
 		    .attr("height", function(d, i) {return (d[0] * (height/maxValue))})
 		    .attr("width","32")
+		    .attr('fill', function(d, i) {
+		        return color(d[1]);
+		    })
 		    .attr("x", function(d) {return x(d[1]) + 6;})
 		    .attr("y", function(d, i) {return height - (d[0] * (height/maxValue))})
-		    .style("opacity", function(d, i) {return ((2)*d[0]/maxValue) + .075;})
 		    .on("mouseover", function(d) {
 			div.transition()
 			.duration(200)
@@ -79,6 +83,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 			.selectAll("text")
 			.style("text-anchor", "start")
 			.style("font-size", "12px")
+			.attr("class", "x-axis-label")
 			.attr("dx", ".8em")
 			.attr("dy", "-.45em")
 			.attr("transform", "rotate(90)")
@@ -120,17 +125,17 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 			.attr("transform", "rotate(-90)")
 
 		// TITLE
-		//svg.append("text")
-		//	.attr("x", (width / 2) + 60)
-		//	.attr("y", 20 - (margin.top / 2))
-		//	.attr("text-anchor", "middle")
-		//	.style("font-size", "30px")
-		//	.style('font', 'sans-serif')
-		//	.text(title);
+		svg.append("text")
+			.attr("x", (width / 2) + 10)
+			.attr("y", 20 - (margin.top / 2))
+			.attr("text-anchor", "middle")
+			.style("font-size", "30px")
+			.style('font', 'sans-serif')
+			.text(title);
 
 }
 
-var pieChart = function(dataArray, chart) {
+var pieChart = function(dataArray, chart, title) {
 	dataArray.forEach(function(d) {
 	    d[2] = true;                        
 	});
@@ -143,8 +148,8 @@ var pieChart = function(dataArray, chart) {
 	dataArray.push([remainingPercentage, "Other", true])
 
 	var width = 720;
-	var height = 360;
-	var radius = Math.min(width, height) / 2;
+	var height = 500;
+	var radius = Math.min(360, height) / 2;
 
 	var color = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -259,4 +264,13 @@ var pieChart = function(dataArray, chart) {
 	  .attr('class', 'label1');                  
 	tooltip.append('div')                        
 	  .attr('class', 'percent');
+
+	// TITLE
+        svg.append("text")
+	   .attr("x", 0)
+           .attr("y", -220)
+           .attr("text-anchor", "middle")
+           .style("font-size", "30px")
+           .style('font', 'sans-serif')
+	   .text(title);
 }
