@@ -1,4 +1,4 @@
-var barChart = function(dataArray, title, yAxis, chart, links=false) {
+var barChart = function(dataArray, title, yAxis, chart, links=false, marginBottom=0) {
 	adjust_label = 0;
 	if(title == "Time on page") {
 	  adjust_label = 3;
@@ -13,7 +13,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 		.attr("class", "barchart-tooltip")
 		.style("opacity", 0);
 
-		var margin = {top: 30, right: 20, bottom: longestEntry[1].length * 6.04, left: 80},
+		var margin = {top: 30, right: 20, bottom: longestEntry[1].length * 6.04 + marginBottom, left: 80},
 			width = 730 - margin.left - margin.right,
 			height = 450;
 
@@ -36,7 +36,8 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 		    .enter().append("rect")
 		    .attr("class", "bar")
 		    .attr("height", function(d, i) {return (d[0] * (height/maxValue))})
-		    .attr("width","32")
+		    .attr("width","25")
+		    .style("opacity", function(d, i) {return ((1.8)*d[0]/maxValue + .2);})
 		    .attr('fill', function(d, i) {
 		        return color(d[1]);
 		    })
@@ -58,7 +59,11 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
 			.style("opacity", 0);
 		    })
 		    .on("click", function(d) {
-			window.open("https://" + d[1], "_blank")
+			if(title=="Top Datasets"){
+			  window.open("https://catalog.data.gov/dataset/" + d[2].replace(/ /g, '-').toLowerCase(), "_blank")
+			} else {
+			  window.open("https://" + d[1], "_blank")
+			}
 		    })
 
 	//	svg.selectAll("text")
@@ -106,8 +111,12 @@ var barChart = function(dataArray, title, yAxis, chart, links=false) {
                                 .duration(200)
                                 .style("opacity", 0);
                         })
-                        .on("click", function(d) {
-                                window.open("https://" + d[1], "_blank")
+			.on("click", function(d) {
+                          if(title=="Top Datasets"){
+                            window.open("https://catalog.data.gov/dataset/" + d[2].replace(/ /g, '-').toLowerCase(), "_blank")
+                          } else {
+                            window.open("https://" + d[1], "_blank")
+                          }
                         })
 
 		// AXIS LABLE
@@ -148,7 +157,7 @@ var pieChart = function(dataArray, chart, title) {
 	dataArray.push([remainingPercentage, "Other", true])
 
 	var width = 720;
-	var height = 500;
+	var height = 450;
 	var radius = Math.min(360, height) / 2;
 
 	var color = d3.scaleOrdinal(d3.schemeCategory20);
@@ -158,7 +167,7 @@ var pieChart = function(dataArray, chart, title) {
 	  .attr('width', width)
 	  .attr('height', height)
 	  .append('g')
-	  .attr('transform', 'translate(' + (width / 2) +  ',' + (height / 2) + ')');
+	  .attr('transform', 'translate(' + (width / 2) +  ',' + (height / 2 + 25) + ')');
 
 	var arc = d3.arc()
 	  .innerRadius(0)
@@ -268,7 +277,7 @@ var pieChart = function(dataArray, chart, title) {
 	// TITLE
         svg.append("text")
 	   .attr("x", 0)
-           .attr("y", -220)
+           .attr("y", -215)
            .attr("text-anchor", "middle")
            .style("font-size", "30px")
            .style('font', 'sans-serif')

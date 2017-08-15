@@ -117,7 +117,7 @@ class GaReport(BaseController):
                 if key == 'Average time on site':
                     mins, secs = divmod(float(val), 60)
                     hours, mins = divmod(mins, 60)
-                    val = '%02d:%02d:%02d (%s seconds) ' % (hours, mins, secs, val)
+                    val = val
                 if key in ['New visits','Bounce rate (home page)']:
                     val = "%s%%" % val
             if key in ['Total page views', 'Total visits']:
@@ -175,7 +175,9 @@ class GaReport(BaseController):
 	    'Exit page' : 'exit_page',
 	    'Time on page': 'time_on_page',
 	    'Mobile brands': 'mobile_brands',
-	    'Mobile devices': 'mobile_devices'
+	    'Mobile devices': 'mobile_devices',
+	    'Search keywords': 'search_keywords',
+	    'Search destination page': 'search_destination_page'
         }
 
         def shorten_name(name, length=60):
@@ -231,10 +233,10 @@ class GaReport(BaseController):
             entries = sorted(entries, key=operator.itemgetter(1), reverse=True)
 	   
 	    #convert data to be used for bar and pie charts 
- 	    chart_entries = map(convert_for_chart, entries)[:15]
+ 	    chart_entries = map(convert_for_chart, entries)[:20]
 	    setattr(c, v+'_chart', json.dumps(chart_entries))
 	
-	    if k not in ('Social sources', 'Page views', 'Page avgTime', 'Landing page', 'Exit page', 'Second page', 'Third page', 'Time on page'):
+	    if k not in ('Social sources', 'Page views', 'Page avgTime', 'Landing page', 'Exit page', 'Second page', 'Third page', 'Time on page', 'Search keywords', 'Search destination page'):
 		total = sum([num for _,num in entries])
 		pie_chart_entries = map(convert_for_pie_chart, chart_entries)
 		setattr(c,v+'_chart',json.dumps(pie_chart_entries))
@@ -244,7 +246,7 @@ class GaReport(BaseController):
             if k == 'Social sources':
                 total = sum([x for n,x in c.global_totals if n == 'Total visits'])
 		setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
-	    elif k in ('Page views','Page avgTime','Landing page','Exit page','Second page', 'Third page', 'Time on page'):
+	    elif k in ('Page views','Page avgTime','Landing page','Exit page','Second page', 'Third page', 'Time on page', 'Search keywords', 'Search destination page'):
 		setattr(c, v, [(k,v) for k,v in entries ])
             else:
                 total = sum([num for _,num in entries])
@@ -315,6 +317,12 @@ class GaDatasetReport(BaseController):
         # month names from the values.
         c.months, c.day = _month_details(GA_Url)
 
+	def convert_for_chart(arg):
+            newArray = []
+            newArray.append(arg[1])
+            newArray.append(arg[0].title)
+            return newArray
+
         # Work out which month to show, based on query params of the first item
         c.month = request.params.get('month', '')
         c.month_desc = 'all months'
@@ -322,8 +330,9 @@ class GaDatasetReport(BaseController):
             c.month_desc = ''.join([m[1] for m in c.months if m[0]==c.month])
 
         c.top_publishers = _get_top_publishers()
-        graph_data = _get_top_publishers_graph()
-        c.top_publishers_graph = json.dumps( _to_rickshaw(graph_data) )
+
+	chart_entries = map(convert_for_chart, c.top_publishers)[:20]
+	setattr(c, 'publisher_chart', json.dumps(chart_entries))
 
         return render('ga_report/publisher/index.html')
 
@@ -378,7 +387,14 @@ class GaDatasetReport(BaseController):
         '''
         Lists the most popular datasets for a publisher (or across all publishers)
         '''
-        count = 20
+        count = 100
+
+	def convert_for_chart(arg):
+            newArray = []
+            newArray.append(arg[1])
+            newArray.append(arg[0].title)
+	    newArray.append(arg[0].name)
+            return newArray
 
         c.publishers = _get_publishers()
 
@@ -408,27 +424,11 @@ class GaDatasetReport(BaseController):
         entry = q.filter(GA_Url.period_name==c.month).first()
         c.publisher_page_views = entry.pageviews if entry else 0
 
-        c.top_packages = self._get_packages(publisher=c.publisher, count=20, month=c.month)
+        c.top_packages = self._get_packages(publisher=c.publisher, count=100, month=c.month)
 
-        # Graph query
-        top_packages_all_time = self._get_packages(publisher=c.publisher, count=20, month='All')
-        top_package_names = [ x[0].name for x in top_packages_all_time ]
-        graph_query = model.Session.query(GA_Url,model.Package)\
-            .filter(model.Package.name==GA_Url.package_id)\
-            .filter(GA_Url.url.like('/dataset/%'))\
-            .filter(GA_Url.package_id.in_(top_package_names))
-        all_series = {}
-        for entry,package in graph_query:
-            if not package: continue
-            if entry.period_name=='All': continue
-            all_series[package.name] = all_series.get(package.name,{
-                'name':package.title,
-                'raw': {}
-                })
-            all_series[package.name]['raw'][entry.period_name] = int(entry.pageviews)
-        graph = [ all_series[series_name] for series_name in top_package_names ]
-        c.graph_data = json.dumps( _to_rickshaw(graph) )
-
+	chart_entries = map(convert_for_chart, c.top_packages)[:20]
+	setattr(c, 'dataset_chart', json.dumps(chart_entries))
+	
         return render('ga_report/publisher/read.html')
 
 def _to_rickshaw(data, percentageMode=False):

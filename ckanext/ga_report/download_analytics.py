@@ -28,6 +28,12 @@ class DownloadAnalytics(object):
         self.token = token
         self.print_progress = print_progress
 
+    def specific_year(self, year):
+	for x in range(1,13):
+	  time_period = str(year) + "-" + str(x)
+	  for_date = datetime.datetime.strptime(time_period, '%Y-%m')
+	  self.specific_month(for_date)
+
     def specific_month(self, date):
         import calendar
 
@@ -254,7 +260,7 @@ class DownloadAnalytics(object):
         end_date = '%s-%s' % (period_name, last_day_of_month)
         funcs = ['_page_stats','_totals_stats', '_referral_stats', '_os_stats',
                  '_locale_stats', '_browser_stats', '_mobile_stats',
-                 '_download_stats'
+                 '_download_stats', '_search_stats'
                  ]
         for f in funcs:
             log.info('Downloading analytics for %s' % f.split('_')[1])
@@ -1022,6 +1028,51 @@ class DownloadAnalytics(object):
         self._filter_out_long_tail(data, MIN_VIEWS)
         ga_model.update_sitewide_stats(period_name, "Mobile devices", data, period_complete_day)
 
+    def _search_stats(self, start_date, end_date, period_name, period_complete_day):
+        """ Info about mobile devices """
+
+        try:
+            args = dict( ids='ga:' + self.profile_id,
+                         metrics='ga:searchResultViews',
+                         sort='-ga:searchResultViews',
+                         dimensions="ga:searchKeyword",
+                         max_results=10000)
+            args['start-date'] = start_date
+            args['end-date'] = end_date
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+        data = {}
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + int(result[1])
+        self._filter_out_long_tail(data, MIN_VIEWS)
+        ga_model.update_sitewide_stats(period_name, "Search keywords", data, period_complete_day)
+
+	try:
+            args = dict( ids='ga:' + self.profile_id,
+                         metrics='ga:searchResultViews',
+                         sort='-ga:searchResultViews',
+                         dimensions="ga:searchAfterDestinationPage",
+                         max_results=10000)
+            args['start-date'] = start_date
+            args['end-date'] = end_date
+
+            results = self._get_ga_data(args)
+        except Exception, e:
+            log.exception(e)
+            results = dict(url=[])
+
+        result_data = results.get('rows')
+        data = {}
+        for result in result_data:
+            data[result[0]] = data.get(result[0], 0) + int(result[1])
+        self._filter_out_long_tail(data, MIN_VIEWS)
+	data = self._edit_url(data)
+        ga_model.update_sitewide_stats(period_name, "Search destination page", data, period_complete_day)
     @classmethod
     def _filter_out_long_tail(cls, data, threshold=10):
         '''

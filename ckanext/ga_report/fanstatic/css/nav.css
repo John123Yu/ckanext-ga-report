@@ -48,6 +48,7 @@ div.tab button.active {
 
 li a.selection {
   color: black !important;
+  padding: 10px 12px !important;
 }
 
 .selection:hover {
@@ -55,3 +56,33 @@ li a.selection {
   font-weight: 700;
 }
 
+.hero-unit {
+  border-radius: 0px;
+  margin-bottom: 0px;
+}
+
+.divider-vertical {
+  margin: 1px !important;
+}
+
+.download_button {
+  margin: 20px 20px 0px 20px !important;
+}
+
+.module-content {
+  padding: 10px 0px !important;
+}
+
+.hero-unit {
+  text-align: center;
+  padding: 40px 10px;
+}
+
+.ga-reports-heading {
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.form-inline {
+  margin-top: 8px;
+}

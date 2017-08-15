@@ -19,3 +19,4 @@ $('select[name="month"]').on('change', function(e) {
     var url = form.attr('action')+'?month='+target.val()+window.location.hash;
     window.location = url;
 });
+
