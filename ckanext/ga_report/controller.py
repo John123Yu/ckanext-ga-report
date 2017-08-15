@@ -238,7 +238,7 @@ class GaReport(BaseController):
 	
 	    if k not in ('Social sources', 'Page views', 'Page avgTime', 'Landing page', 'Exit page', 'Second page', 'Third page', 'Time on page', 'Search keywords', 'Search destination page'):
 		total = sum([num for _,num in entries])
-		pie_chart_entries = map(convert_for_pie_chart, chart_entries)
+		pie_chart_entries = map(convert_for_pie_chart, chart_entries)[:15]
 		setattr(c,v+'_chart',json.dumps(pie_chart_entries))
 	
             # Get the total for each set of values and then set the value as
