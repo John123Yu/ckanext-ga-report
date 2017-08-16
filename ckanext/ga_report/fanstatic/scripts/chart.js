@@ -41,9 +41,14 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 		    .attr('fill', function(d, i) {
 		        return color(d[1]);
 		    })
-		    .attr("x", function(d) {return x(d[1]) + 6;})
+		    .attr("x", function(d) {return x(d[1]) + 4;})
 		    .attr("y", function(d, i) {return height - (d[0] * (height/maxValue))})
 		    .on("mouseover", function(d) {
+			
+			d3.select(this)
+			.style("opacity", 1)
+			.style("stroke-width", 1)
+	
 			div.transition()
 			.duration(200)
 			.style("opacity", 1)
@@ -57,6 +62,10 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 			div.transition()
 			.duration(500)
 			.style("opacity", 0);
+
+			d3.select(this)
+		 	.style("opacity", function(d, i) {return ((1.8)*d[0]/maxValue + .2);})
+			.style("stroke-width", .2)
 		    })
 		    .on("click", function(d) {
 			if(title=="Top Datasets"){
@@ -135,7 +144,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 
 		// TITLE
 		svg.append("text")
-			.attr("x", (width / 2) + 10)
+			.attr("x", (width / 2) - 30)
 			.attr("y", 20 - (margin.top / 2))
 			.attr("text-anchor", "middle")
 			.style("font-size", "30px")
@@ -167,7 +176,7 @@ var pieChart = function(dataArray, chart, title) {
 	  .attr('width', width)
 	  .attr('height', height)
 	  .append('g')
-	  .attr('transform', 'translate(' + (width / 2) +  ',' + (height / 2 + 25) + ')');
+	  .attr('transform', 'translate(' + (width / 2 - 55)  +  ',' + (height / 2 + 25) + ')');
 
 	var arc = d3.arc()
 	  .innerRadius(0)

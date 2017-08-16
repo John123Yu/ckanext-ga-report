@@ -248,6 +248,8 @@ class DownloadAnalytics(object):
 
     def store(self, period_name, period_complete_day, data):
         if 'url' in data:
+	    with open("/tmp/python.log", "a") as mylog:
+    		mylog.write("\nDATA:%s\n" % data)
             ga_model.update_url_stats(period_name, period_complete_day, data['url'],
                                       print_progress=self.print_progress)
 

@@ -1,11 +1,11 @@
 .bar {
   stroke: black;
-  stroke-width: 1;
+  stroke-width: .2;
 }
 
 .bar:hover {
   fill: rgb(255, 236, 96);
-  opacity: .8;
+  box-shadow: 2px 2px grey;
 }
 
 .y-axis {
