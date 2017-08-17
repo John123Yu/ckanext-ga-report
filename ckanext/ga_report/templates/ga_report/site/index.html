@@ -108,9 +108,13 @@
 	$(function() {
 	  barChart({{c.page_views_chart|safe}},'Most Popular Pages','views',"#chart1",true)
 	});
+	$( window ).resize(function() {
+	  document.getElementById("chart1").innerHTML = "";
+	  barChart({{c.page_views_chart|safe}},'Most Popular Pages','views',"#chart1",true)
+	});
 	</script>
 	<br>	
-        <table class="ga-reports-table table table-condensed table-bordered table-striped">
+        <table class="col-sm-12 ga-reports-table table table-condensed table-bordered table-striped">
           <tr>
             <th>Page</th>
             <th class="td-numeric">Views</th>

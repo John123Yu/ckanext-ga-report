@@ -3,6 +3,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 	if(title == "Time on page") {
 	  adjust_label = 3;
 	}
+	var rect_width = 25;
 	var longestEntry =  dataArray.sort(function (a, b) { return b[1].length - a[1].length; })[0];
 	dataArray = dataArray.sort(function(a, b){return b[0] - a[0];});
 	dataArray = dataArray.map(function(item) {item[0] = Math.round(item[0]); return item;})
@@ -14,8 +15,13 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 		.style("opacity", 0);
 
 		var margin = {top: 30, right: 20, bottom: longestEntry[1].length * 6.04 + marginBottom, left: 80},
-			width = 730 - margin.left - margin.right,
-			height = 450;
+		    width = 730 - margin.left - margin.right,
+		    height = 450;
+		    if(window.innerWidth < 990 && window.innerWidth >= 768){
+		      width = 730 - (990 - window.innerWidth) / 1.2 - margin.left - margin.right;
+		      dataArray = dataArray.slice(0, 15);
+		      rect_width = 22.5;
+		    }
 
 		var x = d3.scaleBand().range([0, dataArray.length * (width/dataArray.length)]);
 		var y = d3.scaleLinear().range([height, 0]);
@@ -36,7 +42,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 		    .enter().append("rect")
 		    .attr("class", "bar")
 		    .attr("height", function(d, i) {return (d[0] * (height/maxValue))})
-		    .attr("width","25")
+		    .attr("width", rect_width)
 		    .style("opacity", function(d, i) {return ((1.8)*d[0]/maxValue + .2);})
 		    .attr('fill', function(d, i) {
 		        return color(d[1]);
