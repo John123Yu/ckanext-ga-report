@@ -39,6 +39,8 @@ div.tab button.active {
   width: 95%;
   margin-left: 2.5%;
   border: 1px solid rgb(218, 218, 218);
+  padding: 0px;
+  border-left: 0px !important;
 }
 
 .navbar-inner {

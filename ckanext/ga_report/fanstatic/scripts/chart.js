@@ -4,6 +4,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 	  adjust_label = 3;
 	}
 	var rect_width = 25;
+	var y_axis_num = "11px";
 	var longestEntry =  dataArray.sort(function (a, b) { return b[1].length - a[1].length; })[0];
 	dataArray = dataArray.sort(function(a, b){return b[0] - a[0];});
 	dataArray = dataArray.map(function(item) {item[0] = Math.round(item[0]); return item;})
@@ -14,14 +15,54 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 		.attr("class", "barchart-tooltip")
 		.style("opacity", 0);
 
-		var margin = {top: 30, right: 20, bottom: longestEntry[1].length * 6.04 + marginBottom, left: 80},
+		var margin = {top: 50, right: 20, bottom: longestEntry[1].length * 6.04 + marginBottom, left: 60},
 		    width = 730 - margin.left - margin.right,
 		    height = 450;
-		    if(window.innerWidth < 990 && window.innerWidth >= 768){
+		    console.log(window.innerWidth)
+		    if(window.innerWidth < 990 && window.innerWidth > 800){
 		      width = 730 - (990 - window.innerWidth) / 1.2 - margin.left - margin.right;
-		      dataArray = dataArray.slice(0, 15);
-		      rect_width = 22.5;
-		    }
+		      dataArray = dataArray.slice(0, 18);
+		      rect_width = 23.5;
+		    } else if (window.innerWidth <= 800 && window.innerWidth > 770) {
+                      width = 710 - (990 - window.innerWidth) / 1.2 - margin.left - margin.right;
+                      dataArray = dataArray.slice(0, 16);
+                      rect_width = 23;
+                    } else if (window.innerWidth <= 770 && window.innerWidth >= 735) {
+		      width = 730 - margin.left - margin.right;
+                      dataArray = dataArray.slice(0, 20);
+                      rect_width = 25;
+		      margin.left = 100;
+		    } else if (window.innerWidth < 735 && window.innerWidth >= 700) {
+		      width = 770 - (990 - window.innerWidth) / 4 - margin.left - margin.right;
+                      dataArray = dataArray.slice(0, 18);
+                      rect_width = 24;
+                    } else if (window.innerWidth < 700 && window.innerWidth >= 620) {
+                      width = 810 - (990 - window.innerWidth) / 2 - margin.left - margin.right;
+                      dataArray = dataArray.slice(0, 17);
+                      rect_width = 23.5;
+                    } else if (window.innerWidth < 620 && window.innerWidth >= 520) {
+                      width = 845 - (990 - window.innerWidth) / 1.5 - margin.left - margin.right;
+                      dataArray = dataArray.slice(0, 16);
+                      rect_width = 22.5;
+                    } else if (window.innerWidth < 520 && window.innerWidth >= 460) {
+                      width = 840 - (990 - window.innerWidth) / 1.5 - margin.left - margin.right;
+                      dataArray = dataArray.slice(0, 15);
+                      rect_width = 20;
+		      margin.left = 50;
+		      y_axis_num = "10px";
+                    } else if (window.innerWidth < 460 && window.innerWidth >= 400) {
+                      width = 820 - (990 - window.innerWidth) / 1.5 - margin.left - margin.right;
+                      dataArray = dataArray.slice(0, 15);
+                      rect_width = 18.5;
+		      margin.left = 45;
+                      y_axis_num = "9px";
+                    } else if (window.innerWidth < 400 && window.innerWidth >= 100) {
+                      width = 870 - (990 - window.innerWidth) / 1.3 - margin.left - margin.right;
+                      dataArray = dataArray.slice(0, 13);
+                      rect_width = 16;
+		      margin.left = 40;
+                      y_axis_num = "7px";
+                    }
 
 		var x = d3.scaleBand().range([0, dataArray.length * (width/dataArray.length)]);
 		var y = d3.scaleLinear().range([height, 0]);
@@ -94,7 +135,8 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 		// AXIS
 		svg.append("g")
 			.attr("class", 'y-axis')
-			.call(d3.axisLeft(y));
+			.call(d3.axisLeft(y))
+			.style("font-size", y_axis_num)
 
 		svg.append("g")
 			.attr("class", 'x-axis')
@@ -102,10 +144,10 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 			.attr("transform", "translate(0," + height + ")")
 			.selectAll("text")
 			.style("text-anchor", "start")
-			.style("font-size", "12px")
+			.style("font-size", "11px")
 			.attr("class", "x-axis-label")
 			.attr("dx", ".8em")
-			.attr("dy", "-.45em")
+			.attr("dy", "-.50em")
 			.attr("transform", "rotate(90)")
 			.data(dataArray)
 			.on("mouseover", function(d) {
@@ -141,17 +183,17 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 		// 	.style("text-anchor", "middle")
 		// 	.text(xAxis)
 
-		svg.append("text")
-			.attr("x", -height/2)
-			.attr("y", -margin.left + 20)
-			.style("text-anchor", "middle")
-			.text(yAxis)
-			.attr("transform", "rotate(-90)")
+		//svg.append("text")
+		//	.attr("x", -height/2)
+		//	.attr("y", -margin.left + 20)
+		//	.style("text-anchor", "middle")
+		//	.text(yAxis)
+		//	.attr("transform", "rotate(-90)")
 
 		// TITLE
 		svg.append("text")
 			.attr("x", (width / 2) - 30)
-			.attr("y", 20 - (margin.top / 2))
+			.attr("y", 10 - (margin.top / 2))
 			.attr("text-anchor", "middle")
 			.style("font-size", "30px")
 			.style('font', 'sans-serif')
@@ -174,6 +216,18 @@ var pieChart = function(dataArray, chart, title) {
 	var width = 720;
 	var height = 450;
 	var radius = Math.min(360, height) / 2;
+	var translate_width = 55;
+
+	if(window.innerWidth < 990 && window.innerWidth > 800){
+        } else if (window.innerWidth < 700 && window.innerWidth >= 370) {
+	  width = window.innerWidth;
+	  radius = (window.innerWidth - 100) / 2 + 15;
+	  translate_width = 0;
+        } else if (window.innerWidth < 370 && window.innerWidth >= 100) {
+	  width = window.innerWidth;
+          radius = (window.innerWidth) / 2 - 10;
+	  translate_width = 0;
+        }
 
 	var color = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -182,7 +236,7 @@ var pieChart = function(dataArray, chart, title) {
 	  .attr('width', width)
 	  .attr('height', height)
 	  .append('g')
-	  .attr('transform', 'translate(' + (width / 2 - 55)  +  ',' + (height / 2 + 25) + ')');
+	  .attr('transform', 'translate(' + (width / 2 - translate_width)  +  ',' + (height / 2 + 25) + ')');
 
 	var arc = d3.arc()
 	  .innerRadius(0)

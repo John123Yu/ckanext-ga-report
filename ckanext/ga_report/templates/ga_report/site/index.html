@@ -293,6 +293,10 @@
         $(function() {
           pieChart({{c.browsers_chart|safe}},"#chart9", "User Browsers")
         });
+	$( window ).resize(function() {
+          document.getElementById("chart9").innerHTML = "";
+	  pieChart({{c.browsers_chart|safe}},"#chart9", "User Browsers")
+        });
         </script>
         {{m.stat_table(c.browsers)}}
       </div>
