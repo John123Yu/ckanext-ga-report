@@ -137,6 +137,10 @@
         $(function() {
           barChart({{c.page_avgTime_chart|safe}},'Average Time on Page','seconds',"#chart2",true)
         });
+	$( window ).resize(function() {
+          document.getElementById("chart2").innerHTML = "";
+	  barChart({{c.page_avgTime_chart|safe}},'Average Time on Page','seconds',"#chart2",true);
+        });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
           <tr>
@@ -159,7 +163,11 @@
         <div class="charts" id="chart3"></div>
         <script>
         $(function() {
-          barChart({{c.landing_page_chart|safe}},'Landing Pages','entrances',"#chart3",true)
+          barChart({{c.landing_page_chart|safe}},'Landing Pages','entrances',"#chart3",true);
+        });
+	$( window ).resize(function() {
+          document.getElementById("chart3").innerHTML = "";
+	  barChart({{c.landing_page_chart|safe}},'Landing Pages','entrances',"#chart3",true);
         });
 	</script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -184,7 +192,11 @@
 	<h4>* Data shows top pages for pages that were the second page to be visited during a session</h4>
         <script>
         $(function() {
-          barChart({{c.second_page_chart|safe}},'Page Path Level 1','entrances',"#chart4",true)
+          barChart({{c.second_page_chart|safe}},'Page Path Level 1','entrances',"#chart4",true);
+        });
+	$( window ).resize(function() {
+          document.getElementById("chart4").innerHTML = "";
+	  barChart({{c.second_page_chart|safe}},'Page Path Level 1','entrances',"#chart4",true);
         });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -211,6 +223,10 @@
         $(function() {
           barChart({{c.third_page_chart|safe}},'Page Path Level 2','entrances',"#chart5",true)
         });
+        $( window ).resize(function() {
+          document.getElementById("chart5").innerHTML = "";
+	  barChart({{c.third_page_chart|safe}},'Page Path Level 2','entrances',"#chart5",true);
+        });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
           <tr>
@@ -235,6 +251,10 @@
         $(function() {
           barChart({{c.exit_page_chart|safe}},'Exit Pages','exits',"#chart7",true)
         });
+	$( window ).resize(function() {
+          document.getElementById("chart7").innerHTML = "";
+	  barChart({{c.exit_page_chart|safe}},'Exit Pages','exits',"#chart7",true);
+        });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
           <tr>
@@ -258,6 +278,10 @@
 	<script>
         $(function() {
           barChart({{c.time_on_page_chart|safe}},'Total Time on Page','seconds',"#chart6",true)
+        });
+	$( window ).resize(function() {
+          document.getElementById("chart6").innerHTML = "";
+	  barChart({{c.time_on_page_chart|safe}},'Total Time on Page','seconds',"#chart6",true)
         });
         </script>
         <table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -311,6 +335,10 @@
         $(function() {
           pieChart({{c.browser_sizes_chart|safe}},"#chart10", "User Screen Sizes")
         });
+	$( window ).resize(function() {
+          document.getElementById("chart10").innerHTML = "";
+	  pieChart({{c.browser_sizes_chart|safe}},"#chart10", "User Screen Sizes")
+        });
         </script>
         {{m.stat_table(c.browser_sizes)}}
       </div>
@@ -324,6 +352,10 @@
         <script>
         $(function() {
           pieChart({{c.device_category_chart|safe}},"#chart18", "User Devices")
+        });
+	$( window ).resize(function() {
+          document.getElementById("chart18").innerHTML = "";
+	  pieChart({{c.device_category_chart|safe}},"#chart18", "User Devices")
         });
         </script>
         {{m.stat_table(c.device_category)}}
@@ -339,6 +371,10 @@
         $(function() {
           pieChart({{c.os_chart|safe}},"#chart11", "User Operating Systems")
         });
+	$( window ).resize(function() {
+          document.getElementById("chart11").innerHTML = "";
+	  pieChart({{c.os_chart|safe}},"#chart11", "User Operating Systems")
+        });
         </script>
         {{m.stat_table(c.os)}}
       </div>
@@ -353,6 +389,10 @@
         $(function() {
           pieChart({{c.mobile_brands_chart|safe}},"#chart12", "User Mobile Brands")
         });
+	$( window ).resize(function() {
+          document.getElementById("chart12").innerHTML = "";
+	  pieChart({{c.mobile_brands_chart|safe}},"#chart12", "User Mobile Brands")
+        });
         </script>
         {{m.stat_table(c.mobile_brands)}}
       </div>
@@ -366,6 +406,10 @@
         <script>
         $(function() {
           pieChart({{c.mobile_devices_chart|safe}},"#chart13", "User Mobile Devices")
+        });
+	$( window ).resize(function() {
+          document.getElementById("chart13").innerHTML = "";
+	  pieChart({{c.mobile_devices_chart|safe}},"#chart13", "User Mobile Devices")
         });
         </script>
         {{m.stat_table(c.mobile_devices)}}
@@ -433,6 +477,10 @@
         $(function() {
           pieChart({{c.languages_chart|safe}},"#chart14", "Languages")
         });
+	$( window ).resize(function() {
+          document.getElementById("chart14").innerHTML = "";
+	  pieChart({{c.languages_chart|safe}},"#chart14", "Languages")
+        });
         </script>
         {{m.stat_table(c.languages)}}
       </div>
@@ -446,6 +494,10 @@
         <script>
         $(function() {
           pieChart({{c.country_chart|safe}},"#chart15", "Country")
+        });
+	$( window ).resize(function() {
+          document.getElementById("chart15").innerHTML = "";
+	  pieChart({{c.country_chart|safe}},"#chart15", "Country")
         });
         </script>
         {{m.stat_table(c.country)}}
@@ -461,6 +513,10 @@
         $(function() {
           pieChart({{c.region_chart|safe}},"#chart16", "Region")
         });
+	$( window ).resize(function() {
+          document.getElementById("chart16").innerHTML = "";
+	  pieChart({{c.region_chart|safe}},"#chart16", "Region")
+        });
         </script>
         {{m.stat_table(c.region)}}
       </div>
@@ -475,6 +531,10 @@
         $(function() {
           pieChart({{c.metro_chart|safe}},"#chart17", "Metro")
         });
+	$( window ).resize(function() {
+          document.getElementById("chart17").innerHTML = "";
+	  pieChart({{c.metro_chart|safe}},"#chart17", "Metro")
+        });
         </script>
         {{m.stat_table(c.metro)}}
       </div>
@@ -488,6 +548,10 @@
         <script>
         $(function() {
           barChart({{c.search_keywords_chart|safe}},"Search Keywords", 'search views', "#chart19", true)
+        });
+	$( window ).resize(function() {
+          document.getElementById("chart19").innerHTML = "";
+	  barChart({{c.search_keywords_chart|safe}},"Search Keywords", 'search views', "#chart19", true)
         });
         </script>
 	<table class="ga-reports-table table table-condensed table-bordered table-striped">
@@ -514,6 +578,10 @@
         $(function() {
           barChart({{c.search_destination_page_chart|safe}},"Destination Page After Searches", 'search views', "#chart20", true)
         });
+	$( window ).resize(function() {
+          document.getElementById("chart20").innerHTML = "";
+	  barChart({{c.search_destination_page_chart|safe}},"Destination Page After Searches", 'search views', "#chart20", true)
+        });
         </script>
 	<table class="ga-reports-table table table-condensed table-bordered table-striped">
           <tr>
@@ -534,7 +602,82 @@
 
 {% block secondary_content %}
   {% with download_link=h.url_for(controller='ckanext.ga_report.controller:GaReport',action='csv',month=c.month or 'all') %}
-    <a class="btn button btn-primary btn-sm download_button" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
+    <a class="btn button btn-info btn-sm download_button" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
   {% endwith %}
-    <a class="btn button btn-primary btn-sm download_button" href="/data/site-usage/dataset">Dataset Usage Statistics</a>  
+    <a class="btn button btn-success btn-sm download_button" href="/data/site-usage/dataset">Dataset Usage Statistics</a>
+    <a class="btn button btn-success btn-sm download_button" href="/data/site-usage/publisher">Publisher Usage Statistics</a> 
+    <table class="table table-bordered info_table">
+      <tr>
+	<th style="font-size:14px;background-color:rgb(184, 199, 216);">Dimension</th>
+	<th style="font-size:14px;background-color:rgb(184, 199, 216);">Metric</th>
+      </tr>
+      <tr class="tabcontent_info" id="page_views_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="A page on the website specified by path and/or query parameters">pagePath</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="page_avgTime_info">
+        <td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="A page on the website specified by path and/or query parameters">pagePath</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The average time users spent viewing this page or a set of pages">avgTimeOnPage</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="time_on_page_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="A page on the website specified by path and/or query parameters">pagePath</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="Time (in seconds) users spent on a particular page, calculated by subtracting the initial view time for a particular page from the initial view time for a subsequent page.">timeOnPage</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="landing_page_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The first page in users' sessions, or the landing page">landingPagePath</a></td>
+        <td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The number of entrances to the property measured as the first pageview in a session, typically used with landingPagePath">entrances</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="second_page_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="This dimension rolls up all the page paths in the first hierarchical level in pagePath">pagePathLevel1</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The number of entrances to the property measured as the first pageview in a session, typically used with landingPagePath">entrances</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="third_page_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="This dimension rolls up all the page paths in the second hierarchical level in pagePath">pagePathLevel2</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The number of entrances to the property measured as the first pageview in a session, typically used with landingPagePath">entrances</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="exit_page_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The last page or exit page in users' sessions">exitPagePath</a></td>
+        <td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The number of exits from the property">exits</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="browsers_names_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The name of users' browsers, for example, Internet Explorer or Firefox">browser</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="browsers_sizes_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The viewport size of users' browsers. A session-scoped dimension, browser size captures the initial dimensions of the viewport in pixels and is formatted as width x height, for example, 1920x960">browserSize</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="device_category_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The type of device: desktop, tablet, or mobile">deviceCategory</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="os_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="Users' operating system, for example, Windows, Linux, Macintosh, or iOS">operatingSystem</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="languages_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The language, in ISO-639 code format (e.g., en-gb for British English), provided by the HTTP Request for the browser">language</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="country_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="Users' country, derived from their IP addresses or Geographical IDs">country</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="region_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="Users' region, derived from their IP addresses or Geographical IDs. In U.S., a region is a state, New York, for example">region</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="metro_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The Designated Market Area (DMA) from where traffic arrived">metro</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="search_keywords_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="Search term used within the property">searchKeyword</a></td>
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The number of times a search result page was viewed">searchResultViews</a></td>
+      </tr>
+      <tr class="tabcontent_info" id="search_destination_page_info">
+	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The page that users visited after performing an internal search on the site">searchAfterDestinationPage</a></td>
+        <td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The number of times a search result page was viewed">searchResultViews</a></td>
+      </tr>
+    </table> 
 {% endblock %}

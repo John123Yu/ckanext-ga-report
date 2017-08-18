@@ -55,7 +55,6 @@ li a.selection {
 
 .selection:hover {
   color: #4679B2 !important;
-  font-weight: 700;
 }
 
 .hero-unit {
@@ -68,7 +67,7 @@ li a.selection {
 }
 
 .download_button {
-  margin: 20px 20px 0px 20px !important;
+  margin: 12.5px 20px 0px 20px !important;
 }
 
 .module-content {
@@ -87,4 +86,30 @@ li a.selection {
 
 .form-inline {
   margin-top: 8px;
+}
+
+.info_table {
+  margin: 12.5px 20px 20px 20px !important;
+  font-size: 11px;
+  width: 85% !important;
+}
+
+.info_table th, .info_table td {
+  padding: 4px 3px 3px 4px !important;
+}
+
+.tooltip.in {
+  opacity: 1;
+}
+
+.tooltip > .tooltip-inner {
+  opacity: 1 !important;
+  color: rgb(40, 72, 107);
+  padding: 10px !important;
+  font-size: 15px !important;
+  background-color: rgb(255, 236, 96);
+}
+
+.tooltip > .tooltip-arrow {
+  color: rgb(255, 236, 96);
 }

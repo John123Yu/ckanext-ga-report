@@ -15,7 +15,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 		.attr("class", "barchart-tooltip")
 		.style("opacity", 0);
 
-		var margin = {top: 50, right: 20, bottom: longestEntry[1].length * 6.04 + marginBottom, left: 60},
+		var margin = {top: 50, right: 20, bottom: longestEntry[1].length * 5.27 + marginBottom, left: 60},
 		    width = 730 - margin.left - margin.right,
 		    height = 450;
 		    console.log(window.innerWidth)
@@ -63,7 +63,7 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 		      margin.left = 40;
                       y_axis_num = "7px";
                     }
-
+		    if(title == "Total Time on Page"){ y_axis_num = "6px";}
 		var x = d3.scaleBand().range([0, dataArray.length * (width/dataArray.length)]);
 		var y = d3.scaleLinear().range([height, 0]);
 

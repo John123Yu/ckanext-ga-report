@@ -8,16 +8,18 @@ function openTab(evt, cityName, chartId) {
     for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
     }
-
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    tabcontent_info = document.getElementsByClassName("tabcontent_info");
+    for(i=0; i<tabcontent_info.length; i++){
+	tabcontent_info[i].style.color = "black";
+        tabcontent_info[i].style.fontWeight = "400";
+        tabcontent_info[i].style.backgroundColor = "white";
     }
 
-    // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(cityName).style.display = "block";
-    evt.currentTarget.className += " active";
+    document.getElementById(cityName + "_info").style.color = "rgb(70, 121, 178)";
+    document.getElementById(cityName + "_info").style.fontWeight = "700";
+    document.getElementById(cityName + "_info").style.backgroundColor = "rgb(255, 236, 96)";
+//    document.getElementById(cityName + "_info").style.display = "block";
 
   if(count != 0) {
     $('html,body').animate({
@@ -28,3 +30,7 @@ function openTab(evt, cityName, chartId) {
 }
 
 document.getElementById("defaultOpen").click();
+
+$(function() {
+    $('a').tooltip({placement: 'right'});
+});
