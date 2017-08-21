@@ -1,5 +1,7 @@
 var count = 0;
+var last_div;
 function openTab(evt, cityName, chartId) {
+    last_div = chartId;
     // Declare all variables
     var i, tabcontent, tablinks;
 
@@ -21,15 +23,15 @@ function openTab(evt, cityName, chartId) {
     document.getElementById(cityName + "_info").style.backgroundColor = "rgb(255, 236, 96)";
 //    document.getElementById(cityName + "_info").style.display = "block";
 
-  if(count != 0) {
-    $('html,body').animate({
-        scrollTop: $("#" + chartId).offset().top - 100},
-        'fast')
-  }
-  count = 1;
+  //if(count != 0) {
+  //  $('html,body').animate({
+  //      scrollTop: $("#" + chartId).offset().top - 100},
+  //      'fast')
+  //}
+  //count = 1;
 }
 
-document.getElementById("defaultOpen").click();
+document.getElementById("chart0_click").click();
 
 $(function() {
     $('a').tooltip({placement: 'right'});

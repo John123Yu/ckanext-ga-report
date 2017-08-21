@@ -1,22 +1,18 @@
-var CKAN = CKAN || {};
-CKAN.GA_Reports = {};
-
-CKAN.GA_Reports.bind_month_selector = function() {
-  var handler = function(e) {
-    var target = $(e.delegateTarget);
-    var form = target.closest('form');
-    var url = form.attr('action')+'?month='+target.val()+window.location.hash;
-    window.location = url;
-  };
-  var selectors = $('select[name="month"]');
-  assert(selectors.length>0);
-  selectors.bind('change', handler);
-};
-
 $('select[name="month"]').on('change', function(e) {
     var target = $(e.delegateTarget);
     var form = target.closest('form');
-    var url = form.attr('action')+'?month='+target.val()+window.location.hash;
-    window.location = url;
+    var url = form.attr('action')+'_'+target.val();
+    if(target.val() == "") {
+	url = form.attr('action') + '_all_months';
+    }
+    $.ajax({
+      url: url,
+      type: "GET",
+      success: function(data){
+         $(".ajax_container").html(data);
+	 document.getElementById(last_div + "_click").click();
+      }
+   });
 });
+
 

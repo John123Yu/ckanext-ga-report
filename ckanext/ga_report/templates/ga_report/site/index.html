@@ -6,9 +6,9 @@
 {% block header %}
   <script  src="https://code.jquery.com/jquery-1.3.min.js" integrity="sha256-kAGRpEMRXYtIqdaNMGLos9cSlyeVG4YXRltIW68lMAY=" crossorigin="anonymous"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
-  {% resource 'scripts/scripts/temp.js' %}
   {% resource 'scripts/scripts/chart.js' %}
   {% resource 'scripts/scripts/nav.js' %}
+  {% resource 'scripts/scripts/temp.js' %}
   {% resource 'scripts/css/chart.css' %}
   {% resource 'scripts/css/nav.css' %}
   {% include "header.html" %}
@@ -24,52 +24,52 @@
   <div class="navbar">
     <div class="navbar-inner">
       <ul class="nav">
-        <li><a class="selection" id="defaultOpen" onclick="openTab(event, 'total_traffic')">Total Traffic</a></li>
+        <li><a class="selection" id="chart0_click" onclick="openTab(event, 'total_traffic', 'chart0')">Total Traffic</a></li>
 	<li class="divider-vertical"></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle selection" data-toggle="dropdown">Page Statistics</a>
     	  <ul class="dropdown-menu">
-    	    <li><a onclick="openTab(event, 'page_views', 'chart1')">Most Popular Pages</a></li>
-    	    <li><a onclick="openTab(event, 'page_avgTime', 'chart2')">Average Time on Page</a></li>
-    	    <li><a onclick="openTab(event, 'time_on_page', 'chart6')">Total Time on Page</a></li>
-    	    <li><a onclick="openTab(event, 'landing_page','chart3')">Landing Pages</a></li>
-    	    <li><a onclick="openTab(event, 'second_page','chart4')">Page Path Level 1</a></li>
-    	    <li><a onclick="openTab(event, 'third_page','chart5')">Page Path Level 2</a></li>
-    	    <li><a onclick="openTab(event, 'exit_page','chart7')">Exit Pages</a></li>
+    	    <li><a id="chart1_click" onclick="openTab(event, 'page_views', 'chart1')">Most Popular Pages</a></li>
+    	    <li><a id="chart2_click" onclick="openTab(event, 'page_avgTime', 'chart2')">Average Time on Page</a></li>
+    	    <li><a id="chart6_click" onclick="openTab(event, 'time_on_page', 'chart6')">Total Time on Page</a></li>
+    	    <li><a id="chart3_click" onclick="openTab(event, 'landing_page','chart3')">Landing Pages</a></li>
+    	    <li><a id="chart4_click" onclick="openTab(event, 'second_page','chart4')">Page Path Level 1</a></li>
+    	    <li><a id="chart5_click" onclick="openTab(event, 'third_page','chart5')">Page Path Level 2</a></li>
+    	    <li><a id="chart7_click" onclick="openTab(event, 'exit_page','chart7')">Exit Pages</a></li>
     	  </ul>
     	</li>
 	<li class="divider-vertical"></li>
         <li class="dropdown">
     	  <a href="#" class="dropdown-toggle selection" data-toggle="dropdown">Device Statistics</a>
     	  <ul class="dropdown-menu">
-    	    <li><a onclick="openTab(event, 'browsers_names')">Browsers</a></li>
-    	    <li><a onclick="openTab(event, 'browser_sizes')">Screen Sizes</a></li>
-    	    <li><a onclick="openTab(event, 'device_category')">User Devices</a></li>
-    	    <li><a onclick="openTab(event, 'os')">User Operating Systems</a></li>
+    	    <li><a id="chart9_click" onclick="openTab(event, 'browsers_names', 'chart9')">Browsers</a></li>
+    	    <li><a id="chart10_click" onclick="openTab(event, 'browser_sizes', 'chart10')">Screen Sizes</a></li>
+    	    <li><a id="chart18_click" onclick="openTab(event, 'device_category', 'chart18')">User Devices</a></li>
+    	    <li><a id="chart11_click" onclick="openTab(event, 'os', 'chart11')">User Operating Systems</a></li>
     	  </ul>
         </li>
 	<li class="divider-vertical"></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle selection" data-toggle="dropdown">Location Statistics</a>
       	  <ul class="dropdown-menu">
-    	    <li><a onclick="openTab(event, 'languages')">Languages</a></li>
-    	    <li><a onclick="openTab(event, 'country')">Country</a></li>
-    	    <li><a onclick="openTab(event, 'region')">Region</a></li>
-    	    <li><a onclick="openTab(event, 'metro')">Metro</a></li>
+    	    <li><a id="chart14_click" onclick="openTab(event, 'languages', 'chart14')">Languages</a></li>
+    	    <li><a id="chart15_click" onclick="openTab(event, 'country', 'chart15')">Country</a></li>
+    	    <li><a id="chart16_click" onclick="openTab(event, 'region', 'chart16')">Region</a></li>
+    	    <li><a id="chart17_click" onclick="openTab(event, 'metro', 'chart17')">Metro</a></li>
           </ul>
         </li>
 	<li class="divider-vertical"></li>
         <li class="dropdown">
           <a href="#" class="dropdown-toggle selection" data-toggle="dropdown">Search Statistics</a>
           <ul class="dropdown-menu">
-            <li><a onclick="openTab(event, 'search_keywords')">Search Keyword</a></li>
-            <li><a onclick="openTab(event, 'search_destination_page')">Destination Pages</a></li>
+            <li><a id="chart19_click" onclick="openTab(event, 'search_keywords', 'chart19')">Search Keyword</a></li>
+            <li><a id="chart20_click" onclick="openTab(event, 'search_destination_page', 'chart20')">Destination Pages</a></li>
           </ul>
         </li>
       </ul>
     </div>
   </div>
-  <div class="" >
+  <div class="ajax_container" >
     <div class="enclosing_body col-md-8 col-sm-10">
       <div class="tabcontent" id="total_traffic">
 	<div class="col-sm-12 top_row hero-unit">
@@ -89,10 +89,10 @@
 	  {% set value = value|float %}
           <tr>
             <td>{{name}}</td>
-	    {% if name=="Average time on site" %}
-	    <td>{{value}}</td>
+	    {% if name=="Average time on site" or name == "Average time on a page" %}
+	    <td>{{"{:,.2f}".format(value)}} (s)</td>
 	    {% else %}
-	    <td>{{value|round(2, 'floor')}}</td>
+	    <td>{{"{:,.2f}".format(value|round(2, 'floor'))}}</td>
 	    {% endif %}
           </tr>
           {% endfor %}
@@ -561,7 +561,7 @@
           </tr>
           {% for page, timeOn in c.search_keywords %}
           <tr>
-            <td>{{page}}</td>
+            <td><a href="https://catalog.data.gov/dataset?q={{page}}" target="_blank">{{page}}</a></td>
             <td class="td-numeric">{{timeOn}}</td>
           </tr>
           {% endfor %}
@@ -610,6 +610,10 @@
       <tr>
 	<th style="font-size:14px;background-color:rgb(184, 199, 216);">Dimension</th>
 	<th style="font-size:14px;background-color:rgb(184, 199, 216);">Metric</th>
+      </tr>
+      <tr class="tabcontent_info" id="total_traffic_info" style="display:none;">
+	<td></td>
+	<td></td>
       </tr>
       <tr class="tabcontent_info" id="page_views_info">
 	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="A page on the website specified by path and/or query parameters">pagePath</a></td>

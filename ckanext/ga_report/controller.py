@@ -93,6 +93,143 @@ class GaReport(BaseController):
                              entry.key.encode('utf-8'),
                              entry.value.encode('utf-8')])
 
+    def month_data(self, month):
+	c.months, c.day = _month_details(GA_Stat)
+	c.month = month
+	if c.month:
+            c.month_desc = ''.join([m[1] for m in c.months if m[0]==c.month])
+
+	q = model.Session.query(GA_Stat).\
+            filter(GA_Stat.stat_name=='Totals')	   
+	if c.month != 'all_months':
+	    q = q.filter(GA_Stat.period_name==c.month)
+	entries = q.order_by('ga_stat.key').all()
+
+	def clean_key(key, val):
+            if key in ['Average time on site', 'Pages per visit', 'New visits', 'Bounce rate (home page)']:
+                val =  "%.2f" % round(float(val), 2)
+                if key == 'Average time on site':
+                    mins, secs = divmod(float(val), 60)
+                    hours, mins = divmod(mins, 60)
+                    val = val
+                if key in ['New visits','Bounce rate (home page)']:
+                    val = "%s%%" % val
+            if key in ['Total page views', 'Total visits']:
+                val = int(val)
+
+            return key, val
+
+ 	c.global_totals = []	
+	if c.month != 'all_months':
+	    for e in entries:
+                key, val = clean_key(e.key, e.value)
+                c.global_totals.append((key, val))
+	else:
+	    d = collections.defaultdict(list)
+            for e in entries:
+                d[e.key].append(float(e.value))
+            for k, v in d.iteritems():
+                if k in ['Total page views', 'Total visits']:
+                    v = sum(v)
+                else:
+                    v = float(sum(v))/float(len(v))
+                key, val = clean_key(k,v)
+
+                c.global_totals.append((key, val))
+
+
+	def sort_func(x):
+            key = x[0]
+            total_order = ['Total page views','Total visits','Pages per visit','Average time on site', 'Average time on a page', 'New users', 'New users percentage', 'Percent with search', 'Bounce rate']
+            if key in total_order:
+                return total_order.index(key)
+            return 999
+        c.global_totals = sorted(c.global_totals, key=sort_func)
+	
+	keys = {
+            'Browser versions': 'browser_versions',
+            'Browsers': 'browsers',
+            'Operating Systems versions': 'os_versions',
+            'Operating Systems': 'os',
+            'Social sources': 'social_networks',
+            'Languages': 'languages',
+            'Country': 'country',
+            'Browser sizes': 'browser_sizes',
+            'Device category': 'device_category',
+            'Region': 'region',
+            'Metro': 'metro',
+            'Referral sources': 'referral_sources',
+            'Page views': 'page_views',
+            'Page avgTime': 'page_avgTime',
+            'Landing page': 'landing_page',
+            'Second page': 'second_page',
+            'Third page': 'third_page',
+            'Exit page' : 'exit_page',
+            'Time on page': 'time_on_page',
+            'Mobile brands': 'mobile_brands',
+            'Mobile devices': 'mobile_devices',
+            'Search keywords': 'search_keywords',
+            'Search destination page': 'search_destination_page'
+        }
+
+	def shorten_name(name, length=60):
+            return (name[:length] + '..') if len(name) > 60 else name
+
+        def fill_out_url(url):
+            import urlparse
+            return urlparse.urljoin(g.site_url, url)
+
+        def convert_for_chart(arg):
+            newArray = []
+            newArray.append(arg[1])
+            newArray.append(arg[0])
+            return newArray
+
+        def convert_for_pie_chart(arg):
+            newArray = []
+            newArray.append(float(_percent(arg[0],total).strip('%')))
+            newArray.append(arg[1])
+            return newArray
+
+	for k, v in keys.iteritems():
+            q = model.Session.query(GA_Stat).\
+                filter(GA_Stat.stat_name==k).\
+                order_by(GA_Stat.period_name)
+
+	    if c.month != 'all_months':
+	        entries = []
+                q = q.filter(GA_Stat.period_name==c.month)\
+
+	    d = collections.defaultdict(int)
+            for e in q.all():
+                d[e.key] += float(e.value)
+            entries = []
+            for key, val in d.iteritems():
+                entries.append((key,val,))
+            entries = sorted(entries, key=operator.itemgetter(1), reverse=True)
+
+            #convert data to be used for bar and pie charts
+            chart_entries = map(convert_for_chart, entries)[:20]
+            setattr(c, v+'_chart', json.dumps(chart_entries))
+
+	    if k not in ('Social sources', 'Page views', 'Page avgTime', 'Landing page', 'Exit page', 'Second page', 'Third page', 'Time on page', 'Search keywords', 'Search destination page'):
+                total = sum([num for _,num in entries])
+                pie_chart_entries = map(convert_for_pie_chart, chart_entries)[:15]
+                setattr(c,v+'_chart',json.dumps(pie_chart_entries))
+
+            # Get the total for each set of values and then set the value as
+            # a percentage of the total
+            if k == 'Social sources':
+                total = sum([x for n,x in c.global_totals if n == 'Total visits'])
+                setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
+            elif k in ('Page views','Page avgTime','Landing page','Exit page','Second page', 'Third page', 'Time on page', 'Search keywords', 'Search destination page'):
+                setattr(c, v, [(k,v) for k,v in entries ])
+            else:
+                total = sum([num for _,num in entries])
+                setattr(c, v, [(k,_percent(v,total)) for k,v in entries ])
+
+	return render('ga_report/site/month_data.html')
+
     def index(self):
 
         # Get the month details by fetching distinct values and determining the
@@ -107,6 +244,7 @@ class GaReport(BaseController):
 
         q = model.Session.query(GA_Stat).\
             filter(GA_Stat.stat_name=='Totals')
+	
         if c.month:
             q = q.filter(GA_Stat.period_name==c.month)
         entries = q.order_by('ga_stat.key').all()
@@ -145,10 +283,12 @@ class GaReport(BaseController):
                 key, val = clean_key(k,v)
 
                 c.global_totals.append((key, val))
+
+
         # Sort the global totals into a more pleasant order
         def sort_func(x):
             key = x[0]
-            total_order = ['Total page views','Total visits','Pages per visit']
+	    total_order = ['Total page views','Total visits','Pages per visit','Average time on site', 'Average time on a page', 'New users', 'New users percentage', 'Percent with search', 'Bounce rate']
             if key in total_order:
                 return total_order.index(key)
             return 999

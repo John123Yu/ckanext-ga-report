@@ -97,13 +97,19 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 			.style("stroke-width", 1)
 	
 			div.transition()
-			.duration(200)
+			.duration(100)
 			.style("opacity", 1)
 			.style("position", "fixed")
-			.style("left", (80 - d[1].length/2.25) + "%")
-			.style("top", "5%")
+			.style("left", function() {
+                                  if(window.innerWidth > 769){
+                                    return "32%";
+                                  } else {
+                                    return "8%";
+                                  }
+                                })
+			.style("top", "10%")
 
-			div.html(d[1] + "<br>" + yAxis + ": " +  d[0])
+			div.html(d[1] + "<br>" + yAxis + ": " +  d[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
 		    })
 		    .on("mouseout", function(d) {
 			div.transition()
@@ -117,6 +123,8 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 		    .on("click", function(d) {
 			if(title=="Top Datasets"){
 			  window.open("https://catalog.data.gov/dataset/" + d[2].replace(/ /g, '-').toLowerCase(), "_blank")
+			} else if(title=="Search Keywords") {
+			  window.open("https://catalog.data.gov/dataset?q=" + d[1], "_blank") 
 			} else {
 			  window.open("https://" + d[1], "_blank")
 			}
@@ -152,16 +160,21 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 			.data(dataArray)
 			.on("mouseover", function(d) {
                                 div.transition()
-                                .duration(200)
+                                .duration(100)
                                 .style("opacity", 1)
                                 .style("position", "fixed")
-                                .style("left", (75 - d[1].length/3) + "%")
-                                .style("top", "5%")
+                                .style("left", function() {
+				  if(window.innerWidth > 769){
+				    return "32%";
+				  } else {
+				    return "8%";
+				  }		
+				})
+                                .style("top", "10%")
 				//.style('top', (d3.event.layerY + 10) + 'px')
                                 .style("width", d[1].length)
-
-                                div.html(d[1])
-
+				
+				div.html(d[1] + "<br>" + yAxis + ": " +  d[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
                         })
                         .on("mouseout", function(d) {
                                 div.transition()
