@@ -450,6 +450,31 @@ class GaDatasetReport(BaseController):
                              downloads,
                              month])
 
+    def publishers_month(self, month):
+	c.months, c.day = _month_details(GA_Url)
+
+	def convert_for_chart(arg):
+            newArray = []
+            newArray.append(arg[1])
+            newArray.append(arg[0].title)
+            return newArray
+
+	c.month = month
+	c.month_desc = 'all months'
+
+	if c.month == 'all_months':
+	    c.month = 'All'
+
+	if c.month != 'All':
+            c.month_desc = ''.join([m[1] for m in c.months if m[0]==c.month])
+
+	c.top_publishers = _get_top_publishers()
+
+	chart_entries = map(convert_for_chart, c.top_publishers)[:20]
+        setattr(c, 'publisher_chart', json.dumps(chart_entries))
+
+	return render('ga_report/publisher/publisher_month.html')
+	
     def publishers(self):
         '''A list of publishers and the number of views/visits for each'''
 
@@ -571,6 +596,55 @@ class GaDatasetReport(BaseController):
 	
         return render('ga_report/publisher/read.html')
 
+    def read_month(self, month):
+	count = 100
+
+        def convert_for_chart(arg):
+            newArray = []
+            newArray.append(arg[1])
+            newArray.append(arg[0].title)
+            newArray.append(arg[0].name)
+            return newArray
+
+        c.publishers = _get_publishers()
+
+	id = None
+	id = request.params.get('publisher', id)
+        if id and id != 'all':
+            c.publisher = model.Group.get(id)
+            if not c.publisher:
+                abort(404, 'A publisher with that name could not be found')
+            c.publisher_name = c.publisher.name
+        c.top_packages = [] # package, dataset_views in c.top_packages
+
+        # Get the month details by fetching distinct values and determining the
+        # month names from the values.
+        c.months, c.day = _month_details(GA_Url)
+
+        # Work out which month to show, based on query params of the first item
+        c.month = month
+	if c.month == "all_months":
+            c.month_desc = 'all months'
+        else:
+            c.month_desc = ''.join([m[1] for m in c.months if m[0]==c.month])
+
+	if c.month == "all_months":
+	    c.month = "All"
+	month = c.month
+
+	c.publisher_page_views = 0
+	q = model.Session.query(GA_Url).\
+            filter(GA_Url.url=='/publisher/%s' % c.publisher_name)
+        entry = q.filter(GA_Url.period_name==c.month).first()
+        c.publisher_page_views = entry.pageviews if entry else 0
+
+        c.top_packages = self._get_packages(publisher=c.publisher, count=100, month=c.month)
+
+        chart_entries = map(convert_for_chart, c.top_packages)[:20]
+        setattr(c, 'dataset_chart', json.dumps(chart_entries))
+
+	return render('ga_report/publisher/dataset_month.html')
+	
 def _to_rickshaw(data, percentageMode=False):
     if data==[]:
         return data

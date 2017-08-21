@@ -199,7 +199,7 @@ class DownloadAnalytics(object):
             url = strip_off_host_prefix(row[0])
             data[url].append((row[1], int(row[2]),))
 	    count = count + 1
-            if count == 35:
+            if count == 100:
                 break
 	data = self._edit_url(data) 
         ga_model.update_social(period_name, data)
@@ -817,7 +817,7 @@ class DownloadAnalytics(object):
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
 	    count = count + 1
-	    if count == 50:
+	    if count == 100:
 	        break
 
         self._filter_out_long_tail(data, MIN_VIEWS)
@@ -829,7 +829,7 @@ class DownloadAnalytics(object):
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + float(result[2])
 	    count = count + 1
-            if count == 50:
+            if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
 	data = self._edit_url(data)
@@ -858,7 +858,7 @@ class DownloadAnalytics(object):
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
             count = count + 1
-            if count == 50:
+            if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
 	data = self._edit_url(data)
@@ -887,7 +887,7 @@ class DownloadAnalytics(object):
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
             count = count + 1
-            if count == 50:
+            if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
 	data = self._edit_url(data)
@@ -915,7 +915,7 @@ class DownloadAnalytics(object):
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
             count = count + 1
-            if count == 50:
+            if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
 	data = self._edit_url(data)
@@ -943,7 +943,7 @@ class DownloadAnalytics(object):
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
             count = count + 1
-            if count == 50:
+            if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
 	data = self._edit_url(data)
@@ -971,7 +971,7 @@ class DownloadAnalytics(object):
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + float(result[1])
             count = count + 1
-            if count == 50:
+            if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
 	data = self._edit_url(data)

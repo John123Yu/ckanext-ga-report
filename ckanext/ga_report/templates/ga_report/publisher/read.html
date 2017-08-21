@@ -6,7 +6,7 @@
 {% block header %}
   <script  src="https://code.jquery.com/jquery-1.3.min.js" integrity="sha256-kAGRpEMRXYtIqdaNMGLos9cSlyeVG4YXRltIW68lMAY=" crossorigin="anonymous"></script>
   <script src="https://d3js.org/d3.v4.min.js"></script>
-  {% resource 'scripts/scripts/temp.js' %}
+  {% resource 'scripts/scripts/ajax.js' %}
   {% resource 'scripts/scripts/chart.js' %}
   {% resource 'scripts/css/chart.css' %}
   {% resource 'scripts/css/nav.css' %}
@@ -27,7 +27,7 @@
 {% endblock %}
 
 {% block primary_content_inner %}
-  <div>
+  <div class="ajax_container">
    <form style="margin-bottom:10px;" class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaDatasetReport',action='read')}}" method="get">
       <div class="controls">
         {{m.month_selector(c.month, c.months, c.day)}}
@@ -65,7 +65,8 @@
 
 {% block secondary_content %}
     {% set download_link=h.url_for(controller='ckanext.ga_report.controller:GaDatasetReport',action='dataset_csv',id=c.publisher_name or 'all',month=c.month or 'all')%}
-      <a class="btn button btn-primary btn-sm download_button" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
-    <a class="btn button btn-primary btn-sm download_button" href="/data/site-usage">Site Usage Statistics</a>
+      <a class="btn button btn-info btn-sm download_button" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
+    <a class="btn button btn-success btn-sm download_button" href="/data/site-usage">Site Usage Statistics</a>
+    <a class="btn button btn-success btn-sm download_button" href="/data/site-usage/publisher">Publisher Usage Statistics</a>
 {% endblock %}
 
