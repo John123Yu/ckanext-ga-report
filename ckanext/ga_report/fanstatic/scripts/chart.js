@@ -231,12 +231,13 @@ var pieChart = function(dataArray, chart, title) {
 	var radius = Math.min(360, height) / 2;
 	var translate_width = 55;
 
-	if(window.innerWidth < 990 && window.innerWidth > 800){
-        } else if (window.innerWidth < 700 && window.innerWidth >= 370) {
+	if(window.innerWidth < 970 && window.innerWidth > 800){
+	  
+        } else if (window.innerWidth < 700 && window.innerWidth >= 400) {
 	  width = window.innerWidth;
-	  radius = (window.innerWidth - 100) / 2 + 15;
+	  radius = 190;
 	  translate_width = 0;
-        } else if (window.innerWidth < 370 && window.innerWidth >= 100) {
+        } else if (window.innerWidth < 400 && window.innerWidth >= 100) {
 	  width = window.innerWidth;
           radius = (window.innerWidth) / 2 - 10;
 	  translate_width = 0;
@@ -299,7 +300,7 @@ var pieChart = function(dataArray, chart, title) {
 	  .attr('transform', function(d, i) {
 	    var height = legendRectSize + legendSpacing;
 	    var offset =  height * color.domain().length / 2;
-	    var horz = 220
+	    var horz = window.innerWidth < 700 ? 1000 : 220
 	    var vert = i * height - offset;
 	    return 'translate(' + horz + ',' + vert + ')';
 	  });

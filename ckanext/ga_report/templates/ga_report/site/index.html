@@ -5,10 +5,10 @@
 
 {% block header %}
   <script  src="https://code.jquery.com/jquery-1.3.min.js" integrity="sha256-kAGRpEMRXYtIqdaNMGLos9cSlyeVG4YXRltIW68lMAY=" crossorigin="anonymous"></script>
-  <script src="https://d3js.org/d3.v4.min.js"></script>
+  {% resource 'scripts/scripts/temp.js' %}
+  {% resource 'scripts/scripts/d3.js' %}
   {% resource 'scripts/scripts/chart.js' %}
   {% resource 'scripts/scripts/nav.js' %}
-  {% resource 'scripts/scripts/temp.js' %}
   {% resource 'scripts/css/chart.css' %}
   {% resource 'scripts/css/nav.css' %}
   {% include "header.html" %}
@@ -70,7 +70,7 @@
     </div>
   </div>
   <div class="ajax_container" >
-    <div class="enclosing_body col-md-8 col-sm-10">
+    <div class="enclosing_body col-sm-10">
       <div class="tabcontent" id="total_traffic">
 	<div class="col-sm-12 top_row hero-unit">
           <h1 class="site_title">Google Analytics</h1>
