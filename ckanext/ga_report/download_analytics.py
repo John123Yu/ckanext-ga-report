@@ -29,11 +29,11 @@ class DownloadAnalytics(object):
         self.print_progress = print_progress
 
     def specific_year(self, year):
-	for x in range(1,13):
-	    time_period = str(year) + "-" + str(x)
-	    for_date = datetime.datetime.strptime(time_period, '%Y-%m')
+        for x in range(1,13):
+            time_period = str(year) + "-" + str(x)
+            for_date = datetime.datetime.strptime(time_period, '%Y-%m')
             try:
-	        self.specific_month(for_date)
+                self.specific_month(for_date)
             except:
                 pass
 
@@ -336,22 +336,22 @@ class DownloadAnalytics(object):
         return data_dict
 
     def _edit_url(self, data):
-	'''Adds either data.gov or catalog.data.gov to the front of urls'''
-	newDict = {}
-	for k,v in data.iteritems():
-	    if k == "/":
-	        newDict["data.gov" + k] = v
-		continue
-	    try:
-	    	requestUrl = "https://www.data.gov" + k
-	    	r = requests.get(requestUrl)
-		if r.status_code == 200:
-		    newDict["data.gov" + k] = v
-		else:
-		    newDict["catalog.data.gov" + k] = v	
-	    except Exception as e:
-		newDict["catalog.data.gov" + k] = v
-	return newDict
+        '''Adds either data.gov or catalog.data.gov to the front of urls'''
+        newDict = {}
+        for k,v in data.iteritems():
+            if k == "/":
+                newDict["data.gov" + k] = v
+                continue
+            try:
+                requestUrl = "https://www.data.gov" + k
+                r = requests.get(requestUrl)
+                if r.status_code == 200:
+                    newDict["data.gov" + k] = v
+                else:
+                    newDict["catalog.data.gov" + k] = v	
+            except Exception as e:
+                newDict["catalog.data.gov" + k] = v
+        return newDict
 
     @classmethod
     def _do_ga_request(cls, params, headers):
@@ -417,10 +417,10 @@ class DownloadAnalytics(object):
             'Average time on a page': result_data[0][1],
             'New users percentage': result_data[0][2],
             'Total visits': result_data[0][3],
-	    'New users': result_data[0][4],
-	    'Average time on site': result_data[0][5],
-	    'Bounce rate': result_data[0][6],
-	    'Percent with search': result_data[0][7]
+            'New users': result_data[0][4],
+            'Average time on site': result_data[0][5],
+            'Bounce rate': result_data[0][6],
+            'Percent with search': result_data[0][7]
         }
         ga_model.update_sitewide_stats(period_name, "Totals", data, period_complete_day)
 
@@ -459,8 +459,8 @@ class DownloadAnalytics(object):
 
     def _locale_stats(self, start_date, end_date, period_name, period_complete_day):
         """ Fetches stats about language and country """
-	
-	try:
+
+        try:
             args = {}
             args["max-results"] = 100000
             args["start-date"] = start_date
@@ -479,14 +479,14 @@ class DownloadAnalytics(object):
 
         result_data = results.get('rows')
         data = {}
-	count = 0
+        count = 0
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
-	    count = count + 1
+            count = count + 1
         self._filter_out_long_tail(data, MIN_VIEWS)
         ga_model.update_sitewide_stats(period_name, "Languages", data, period_complete_day)
 
-	try:
+        try:
             args = {}
             args["max-results"] = 100000
             args["start-date"] = start_date
@@ -505,14 +505,14 @@ class DownloadAnalytics(object):
 
         result_data = results.get('rows')
         data = {}
-	count = 0
+        count = 0
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
-	    count = count + 1
+            count = count + 1
         self._filter_out_long_tail(data, MIN_VIEWS)
         ga_model.update_sitewide_stats(period_name, "Country", data, period_complete_day)
 
-	try:
+        try:
             args = {}
             args["max-results"] = 100000
             args["start-date"] = start_date
@@ -530,15 +530,15 @@ class DownloadAnalytics(object):
             results = dict(url=[])
 
         result_data = results.get('rows')
-	data = {}
-	count = 0
+        data = {}
+        count = 0
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
-	    count = count + 1
+            count = count + 1
         self._filter_out_long_tail(data, MIN_VIEWS)
         ga_model.update_sitewide_stats(period_name, "Region", data, period_complete_day)
 
-	try:
+        try:
             args = {}
             args["max-results"] = 100000
             args["start-date"] = start_date
@@ -556,12 +556,11 @@ class DownloadAnalytics(object):
             results = dict(url=[])
 
         result_data = results.get('rows')
-
-	data = {}
-	count = 0
+        data = {}
+        count = 0
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
-	    count = count + 1
+            count = count + 1
         self._filter_out_long_tail(data, MIN_VIEWS)
         ga_model.update_sitewide_stats(period_name, "Metro", data, period_complete_day)
 
@@ -659,7 +658,7 @@ class DownloadAnalytics(object):
         self._filter_out_long_tail(data, 3)
         ga_model.update_sitewide_stats(period_name, "Social sources", data, period_complete_day)
 
-	try:
+        try:
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:pageviews',
                          sort='-ga:pageviews',
@@ -740,7 +739,7 @@ class DownloadAnalytics(object):
         self._filter_out_long_tail(data, MIN_VIEWS)
         ga_model.update_sitewide_stats(period_name, "Browsers", data, period_complete_day)
 
-	try:
+        try:
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:pageviews',
                          sort='-ga:pageviews',
@@ -759,16 +758,16 @@ class DownloadAnalytics(object):
         # e.g. [u'Firefox', u'19.0', u'20']
 
         data = {}
-	count = 0
+        count = 0
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
-	    count = count + 1
+            count = count + 1
             if count == 50:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
         ga_model.update_sitewide_stats(period_name, "Browser sizes", data, period_complete_day)
 
-	try:
+        try:
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:pageviews',
                          sort='-ga:pageviews',
@@ -814,29 +813,29 @@ class DownloadAnalytics(object):
         # e.g. [u'Firefox', u'19.0', u'20']
 
         data = {}
-	count = 0
+        count = 0
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + int(result[1])
-	    count = count + 1
-	    if count == 100:
-	        break
+            count = count + 1
+            if count == 100:
+                break
 
         self._filter_out_long_tail(data, MIN_VIEWS)
-	data = self._edit_url(data)	
+        data = self._edit_url(data)	
         ga_model.update_sitewide_stats(period_name, "Page views", data, period_complete_day)
 
-	data = {}
-	count = 0
+        data = {}
+        count = 0
         for result in result_data:
             data[result[0]] = data.get(result[0], 0) + float(result[2])
-	    count = count + 1
+            count = count + 1
             if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
-	data = self._edit_url(data)
+        data = self._edit_url(data)
         ga_model.update_sitewide_stats(period_name, "Page avgTime", data, period_complete_day)
 
-	try:
+        try:
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:entrances',
                          sort='-ga:entrances',
@@ -862,10 +861,10 @@ class DownloadAnalytics(object):
             if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
-	data = self._edit_url(data)
+        data = self._edit_url(data)
         ga_model.update_sitewide_stats(period_name, "Landing page", data, period_complete_day)
 
-	try:
+        try:
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:exits',
                          sort='-ga:exits',
@@ -891,10 +890,10 @@ class DownloadAnalytics(object):
             if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
-	data = self._edit_url(data)
+        data = self._edit_url(data)
         ga_model.update_sitewide_stats(period_name, "Exit page", data, period_complete_day)
 
-	try:
+        try:
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:entrances',
                          sort='-ga:entrances',
@@ -919,10 +918,10 @@ class DownloadAnalytics(object):
             if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
-	data = self._edit_url(data)
+        data = self._edit_url(data)
         ga_model.update_sitewide_stats(period_name, "Second page", data, period_complete_day)
 
-	try:
+        try:
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:entrances',
                          sort='-ga:entrances',
@@ -947,10 +946,10 @@ class DownloadAnalytics(object):
             if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
-	data = self._edit_url(data)
+        data = self._edit_url(data)
         ga_model.update_sitewide_stats(period_name, "Third page", data, period_complete_day)
 
-	try:
+        try:
             args = dict( ids='ga:' + self.profile_id,
                          metrics='ga:timeOnPage',
                          sort='-ga:timeOnPage',
@@ -975,7 +974,7 @@ class DownloadAnalytics(object):
             if count == 100:
                 break
         self._filter_out_long_tail(data, MIN_VIEWS)
-	data = self._edit_url(data)
+        data = self._edit_url(data)
         ga_model.update_sitewide_stats(period_name, "Time on page", data, period_complete_day)
 
     @classmethod

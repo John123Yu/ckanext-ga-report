@@ -150,9 +150,9 @@ class LoadAnalytics(CkanCommand):
             downloader.all_()
         elif time_period == 'latest':
             downloader.latest()
-	elif time_period == 'year':
-	    year_date = self.args[1]
-	    downloader.specific_year(year_date)
+        elif time_period == 'year':
+            year_date = self.args[1]
+            downloader.specific_year(year_date)
         else:
             # The month to use
             for_date = datetime.datetime.strptime(time_period, '%Y-%m')

@@ -50,7 +50,7 @@ class GAReportPlugin(p.SingletonPlugin):
             controller='ckanext.ga_report.controller:GaReport',
             action='index'
         )
-	map.connect(
+        map.connect(
             '/data/site-usage_{month}',
             controller='ckanext.ga_report.controller:GaReport',
             action='month_data'
@@ -77,7 +77,7 @@ class GAReportPlugin(p.SingletonPlugin):
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='publishers'
         )
-	map.connect(
+        map.connect(
             '/data/site-usage/publisher_{month}',
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='publishers_month'
@@ -97,7 +97,7 @@ class GAReportPlugin(p.SingletonPlugin):
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='read'
         )
-	map.connect(
+        map.connect(
             '/data/site-usage/dataset_{month}',
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='read_month'
