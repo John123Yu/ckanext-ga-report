@@ -92,7 +92,7 @@
 	    {% if name=="Average time on site" or name == "Average time on a page" %}
 	    <td>{{"{:,.2f}".format(value)}} (s)</td>
 	    {% else %}
-	    <td>{{"{:,.2f}".format(value|round(2, 'floor'))}}</td>
+	    <td>{{"{:,.0f}".format(value|round(2, 'floor'))}}</td>
 	    {% endif %}
           </tr>
           {% endfor %}
@@ -122,7 +122,7 @@
           {% for page, views in c.page_views %}
           <tr>
             <td><a href="https://{{page}}" target="_blank">{{page}}</a></td>
-            <td class="td-numeric">{{views}}</td>
+            <td class="td-numeric">{{"{:,.0f}".format(views)}}</td>
           </tr>
           {% endfor %}
         </table>
@@ -178,7 +178,7 @@
           {% for page, entrances in c.landing_page %}
           <tr>
             <td><a href="https://{{page}}" target="_blank">{{page}}</a></td>
-            <td class="td-numeric">{{entrances}}</td>
+            <td class="td-numeric">{{"{:,.0f}".format(entrances)}}</td>
           </tr>
           {% endfor %}
         </table>
@@ -189,7 +189,6 @@
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
 	<div class="charts" id="chart4"></div>
-	<h4>* Data shows top pages for pages that were the second page to be visited during a session</h4>
         <script>
         $(function() {
           barChart({{c.second_page_chart|safe}},'Page Path Level 1','entrances',"#chart4",true);
@@ -207,7 +206,7 @@
           {% for page, views in c.second_page %}
           <tr>
             <td><a href="https://{{page}}" target="_blank">{{page}}</a></td>
-            <td class="td-numeric">{{views}}</td>
+            <td class="td-numeric">{{"{:,.0f}".format(views)}}</td>
           </tr>
           {% endfor %}
         </table>
@@ -218,7 +217,6 @@
           {{m.month_selector(c.month, c.months, c.day)}}
         </form>
 	<div class="charts" id="chart5"></div>
-        <h4>* Data shows top pages for pages that were the third page to be visited during a session</h4>	
 	<script>
         $(function() {
           barChart({{c.third_page_chart|safe}},'Page Path Level 2','entrances',"#chart5",true)
@@ -236,7 +234,7 @@
           {% for page, views in c.third_page %}
           <tr>
             <td><a href="https://{{page}}" target="_blank">{{page}}</a></td>
-            <td class="td-numeric">{{views}}</td>
+            <td class="td-numeric">{{"{:,.0f}".format(views)}}</td>
           </tr>
           {% endfor %}
         </table>
@@ -264,7 +262,7 @@
           {% for page, exits in c.exit_page %}
           <tr>
             <td><a href="https://{{page}}" target="_blank">{{page}}</a></td>
-            <td class="td-numeric">{{exits}}</td>
+            <td class="td-numeric">{{"{:,.0f}".format(exits)}}</td>
           </tr>
           {% endfor %}
         </table>
@@ -289,10 +287,10 @@
             <th>Page</th>
             <th class="td-numeric">Time(s)</th>
           </tr>
-          {% for page, timeOn in c.third_page %}
+          {% for page, timeOn in c.time_on_page %}
           <tr>
             <td><a href="https://{{page}}" target="_blank">{{page}}</a></td>
-            <td class="td-numeric">{{timeOn}}</td>
+            <td class="td-numeric">{{"{:,.0f}".format(timeOn)}}</td>
           </tr>
           {% endfor %}
         </table>
@@ -559,10 +557,10 @@
             <th>Page</th>
             <th class="td-numeric">Search Views</th>
           </tr>
-          {% for page, timeOn in c.search_keywords %}
+          {% for page, searchViews in c.search_keywords %}
           <tr>
             <td><a href="https://catalog.data.gov/dataset?q={{page}}" target="_blank">{{page}}</a></td>
-            <td class="td-numeric">{{timeOn}}</td>
+            <td class="td-numeric">{{"{:,.0f}".format(searchViews)}}</td>
           </tr>
           {% endfor %}
         </table>
@@ -588,10 +586,10 @@
             <th>Page</th>
             <th class="td-numeric">Search Views</th>
           </tr>
-          {% for page, timeOn in c.search_destination_page %}
+          {% for page, searchViews in c.search_destination_page %}
           <tr>
             <td><a href="https://{{page}}" target="_blank">{{page}}</a></td>
-            <td class="td-numeric">{{timeOn}}</td>
+            <td class="td-numeric">{{"{:,.0f}".format(searchViews)}}</td>
           </tr>
           {% endfor %}
         </table>

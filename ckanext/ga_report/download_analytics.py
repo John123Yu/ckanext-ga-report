@@ -30,9 +30,12 @@ class DownloadAnalytics(object):
 
     def specific_year(self, year):
 	for x in range(1,13):
-	  time_period = str(year) + "-" + str(x)
-	  for_date = datetime.datetime.strptime(time_period, '%Y-%m')
-	  self.specific_month(for_date)
+	    time_period = str(year) + "-" + str(x)
+	    for_date = datetime.datetime.strptime(time_period, '%Y-%m')
+            try:
+	        self.specific_month(for_date)
+            except:
+                pass
 
     def specific_month(self, date):
         import calendar
@@ -248,8 +251,6 @@ class DownloadAnalytics(object):
 
     def store(self, period_name, period_complete_day, data):
         if 'url' in data:
-	    with open("/tmp/python.log", "a") as mylog:
-    		mylog.write("\nDATA:%s\n" % data)
             ga_model.update_url_stats(period_name, period_complete_day, data['url'],
                                       print_progress=self.print_progress)
 

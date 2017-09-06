@@ -24,7 +24,7 @@
           <td>
               {{h.link_to(publisher.title, h.url_for(controller='ckanext.ga_report.controller:GaDatasetReport', action='read_publisher', id=publisher.name) + (("?month=" + c.month) if c.month else ''))}}
           </td>
-          <td class="td-numeric">{{views}}</td>
+          <td class="td-numeric">{{"{:,.0f}".format(views)}}</td>
         </tr>
         {% endfor %}
      </table>

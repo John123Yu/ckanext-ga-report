@@ -113,3 +113,7 @@ li a.selection {
 .tooltip > .tooltip-arrow {
   color: rgb(255, 236, 96);
 }
+
+.dropdown-menu {
+  left: 0px !important;
+}
