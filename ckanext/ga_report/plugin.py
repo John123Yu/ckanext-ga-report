@@ -46,64 +46,64 @@ class GAReportPlugin(p.SingletonPlugin):
     def after_map(self, map):
         # GaReport
         map.connect(
-            '/data/site-usage',
+            '/site-usage',
             controller='ckanext.ga_report.controller:GaReport',
             action='index'
         )
         map.connect(
-            '/data/site-usage_{month}',
+            '/site-usage_{month}',
             controller='ckanext.ga_report.controller:GaReport',
             action='month_data'
         )
         map.connect(
-            '/data/site-usage/data_{month}.csv',
+            '/site-usage/data_{month}.csv',
             controller='ckanext.ga_report.controller:GaReport',
             action='csv'
         )
         map.connect(
-            '/data/site-usage/downloads',
+            '/site-usage/downloads',
             controller='ckanext.ga_report.controller:GaReport',
             action='downloads'
         )
         map.connect(
-            '/data/site-usage/downloads_{month}.csv',
+            '/site-usage/downloads_{month}.csv',
             controller='ckanext.ga_report.controller:GaReport',
             action='csv_downloads'
         )
 
         # GaDatasetReport
         map.connect(
-            '/data/site-usage/publisher',
+            '/site-usage/publisher',
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='publishers'
         )
         map.connect(
-            '/data/site-usage/publisher_{month}',
+            '/site-usage/publisher_{month}',
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='publishers_month'
         )
         map.connect(
-            '/data/site-usage/publishers_{month}.csv',
+            '/site-usage/publishers_{month}.csv',
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='publisher_csv'
         )
         map.connect(
-            '/data/site-usage/dataset/datasets_{id}_{month}.csv',
+            '/site-usage/dataset/datasets_{id}_{month}.csv',
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='dataset_csv'
         )
         map.connect(
-            '/data/site-usage/dataset',
+            '/site-usage/dataset',
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='read'
         )
         map.connect(
-            '/data/site-usage/dataset_{month}',
+            '/site-usage/dataset_{month}',
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='read_month'
         )
         map.connect(
-            '/data/site-usage/publisher/{id}',
+            '/site-usage/publisher/{id}',
             controller='ckanext.ga_report.controller:GaDatasetReport',
             action='read_publisher'
         )

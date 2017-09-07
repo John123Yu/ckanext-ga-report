@@ -117,3 +117,12 @@ li a.selection {
 .dropdown-menu {
   left: 0px !important;
 }
+
+.dropdown-menu li a{
+  padding-right: 5px;
+  padding-left: 5px;
+  text-align: center;
+}
+.tabcontent_info {
+  cursor: pointer;
+}

@@ -58,7 +58,7 @@
 {% block secondary_content %}
     {% set download_link=h.url_for(controller='ckanext.ga_report.controller:GaDatasetReport',action='publisher_csv',month=c.month or 'all') %}
     <a class="btn button btn-info btn-sm download_button" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
-    <a class="btn button btn-success btn-sm download_button" href="/data/site-usage">Site Usage Statistics</a>
-    <a class="btn button btn-success btn-sm download_button" href="/data/site-usage/dataset">Dataset Usage Statistics</a>
+    <a class="btn button btn-success btn-sm download_button" href="/site-usage">Site Usage Statistics</a>
+    <a class="btn button btn-success btn-sm download_button" href="/site-usage/dataset">Dataset Usage Statistics</a>
 {% endblock %}
 
