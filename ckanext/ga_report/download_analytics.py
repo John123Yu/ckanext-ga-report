@@ -37,6 +37,20 @@ class DownloadAnalytics(object):
             except:
                 pass
 
+    def specific_year_step(self, year):
+        for x in range(1,13):
+            print "Would you like to download data for month: " + str(x) + ". y/n?"
+            user_choice = raw_input().lower()
+            if user_choice == "y":
+                time_period = str(year) + "-" + str(x)
+                for_date = datetime.datetime.strptime(time_period, '%Y-%m')
+                try:
+                    self.specific_month(for_date)
+                except:
+                    pass
+            else:
+                pass
+
     def specific_month(self, date):
         import calendar
 
