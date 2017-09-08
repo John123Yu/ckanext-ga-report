@@ -108,7 +108,10 @@
 	<div class="charts" id="chart1"></div>
 	<script>
 	$(function() {
-	  barChart({{c.page_views_chart|safe}},'Most Popular Pages','views',"#chart1",true)
+          setTimeout(function(){
+            barChart({{c.page_views_chart|safe}},'Most Popular Pages','views',"#chart1",true);
+            console.log("hello");
+           }, 1000);
 	});
 	$( window ).resize(function() {
 	  document.getElementById("chart1").innerHTML = "";
