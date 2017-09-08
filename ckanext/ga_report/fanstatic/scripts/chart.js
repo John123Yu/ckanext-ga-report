@@ -368,3 +368,7 @@ var pieChart = function(dataArray, chart, title) {
            .style('font', 'sans-serif')
 	   .text(title);
 }
+
+console.log("HERE");
+window.resizeTo(window.innerWidth, window.innerHeight);
+console.log("HERE2");
