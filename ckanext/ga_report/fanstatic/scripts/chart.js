@@ -5,6 +5,8 @@ var barChart = function(dataArray, title, yAxis, chart, links=false, marginBotto
 	}
 	var rect_width = 25;
 	var y_axis_num = "11px";
+	console.log("DATA ARRAY: ", dataArray)
+	if(dataArray.length == 0) { return; }
 	var longestEntry =  dataArray.sort(function (a, b) { return b[1].length - a[1].length; })[0];
 	dataArray = dataArray.sort(function(a, b){return b[0] - a[0];});
 	dataArray = dataArray.map(function(item) {item[0] = Math.round(item[0]); return item;})
