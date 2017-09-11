@@ -43,8 +43,6 @@ $('select[name="month"]').on('change', function(e) {
       type: "GET",
       success: function(data){
          $(".ajax_container").html(data);
-         if(!form.attr('action').includes("publisher") && !form.attr('action').includes('dataset')) {
-           document.getElementById(last_div + "_click").click();
          }
       }
    });
