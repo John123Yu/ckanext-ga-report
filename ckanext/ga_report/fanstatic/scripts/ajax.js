@@ -10,7 +10,7 @@ $('select[name="month"]').on('change', function(e) {
       type: "GET",
       success: function(data){
          $(".ajax_container").html(data);
-	 if(form.attr('action').indexOf("publisher") < 0 && !form.attr('action').indexOf("dataset") < 0) { 
+	 if(form.attr('action').indexOf("publisher") < 0 && form.attr('action').indexOf("dataset") < 0) { 
 	   document.getElementById(last_div + "_click").click();
 	 }
       }

@@ -133,17 +133,6 @@ var barChart = function(dataArray, title, yAxis, chart, links, marginBottom) {
 			}
 		    })
 
-	//	svg.selectAll("text")
-	//	    .data(dataArray)
-	//	    .enter().append("text")
-	//	    .text(function(d) {return d[0];})
-	//	    .style("font-size", "12px")
-	//	    .style("fill", "rgb(168, 78, 0)")
-	//	    .style("font-weight", "bold")
-	//	    .attr("x", function(d) {return x(d[1]) - adjust_label + 2  + 35/(d[0].toString().length);})
-	//	    .attr("y", function(d, i) {return height - 5 - (d[0] * (height/maxValue))});
-
-		// AXIS
 		svg.append("g")
 			.attr("class", 'y-axis')
 			.call(d3.axisLeft(y))
@@ -174,7 +163,6 @@ var barChart = function(dataArray, title, yAxis, chart, links, marginBottom) {
 				  }		
 				})
                                 .style("top", "10%")
-				//.style('top', (d3.event.layerY + 10) + 'px')
                                 .style("width", d[1].length)
 				
 				div.html(d[1] + "<br>" + yAxis + ": " +  d[0].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
@@ -187,26 +175,12 @@ var barChart = function(dataArray, title, yAxis, chart, links, marginBottom) {
 			.on("click", function(d) {
                           if(title=="Top Datasets"){
                             window.open("https://catalog.data.gov/dataset/" + d[2].replace(/ /g, '-').toLowerCase(), "_blank")
+                          } else if (title=="Search Keywords") {
+                            window.open("https://catalog.data.gov/dataset?q=" + d[1], "_blank")
                           } else {
                             window.open("https://" + d[1], "_blank")
                           }
                         })
-
-		// AXIS LABLE
-		// svg.append("text")
-		// 	.attr("x", width/2)
-		// 	.attr("y", height + 170 )
-		// 	.style("text-anchor", "middle")
-		// 	.text(xAxis)
-
-		//svg.append("text")
-		//	.attr("x", -height/2)
-		//	.attr("y", -margin.left + 20)
-		//	.style("text-anchor", "middle")
-		//	.text(yAxis)
-		//	.attr("transform", "rotate(-90)")
-
-		// TITLE
 		svg.append("text")
 			.attr("x", (width / 2) - 30)
 			.attr("y", 10 - (margin.top / 2))
@@ -214,7 +188,6 @@ var barChart = function(dataArray, title, yAxis, chart, links, marginBottom) {
 			.style("font-size", "30px")
 			.style('font', 'sans-serif')
 			.text(title);
-
 }
 
 var pieChart = function(dataArray, chart, title) {

@@ -21,7 +21,9 @@
             <td>{{name}}</td>
 	    {% if name=="Average time on site" or name == "Average time on a page" %}
             <td>{{"{:,.2f}".format(value)}} (s)</td>
-            {% else %}
+	    {% elif name=="New users percentage" or name=="Percent with search" or name=="Bounce rate" %}
+            <td>{{"{:,.0f}".format(value|round(2, 'floor'))}}%</td>
+	    {% else %}
             <td>{{"{:,.0f}".format(value|round(2, 'floor'))}}</td>
             {% endif %}
           </tr>
