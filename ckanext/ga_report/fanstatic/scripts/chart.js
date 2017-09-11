@@ -27,9 +27,10 @@ var barChart = function(dataArray, title, yAxis, chart, links, marginBottom) {
 		      dataArray = dataArray.slice(0, 18);
 		      rect_width = 23.5;
 		    } else if (window.innerWidth <= 800 && window.innerWidth > 770) {
-                      width = 710 - (990 - window.innerWidth) / 1.2 - margin.left - margin.right;
-                      dataArray = dataArray.slice(0, 16);
-                      rect_width = 23;
+		      width = 730 - margin.left - margin.right;
+                      dataArray = dataArray.slice(0, 20);
+                      rect_width = 25;
+		      margin.left = 100;
                     } else if (window.innerWidth <= 770 && window.innerWidth >= 735) {
 		      width = 730 - margin.left - margin.right;
                       dataArray = dataArray.slice(0, 20);
