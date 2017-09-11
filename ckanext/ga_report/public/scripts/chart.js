@@ -1,5 +1,4 @@
-var barChart = function(dataArray, title, yAxis, chart, links, marginBottom) {
-	if(marginBottom == undefined) { marginBottom = 0};
+var barChart = function(dataArray, title, yAxis, chart, links=false, marginBottom=0) {
 	adjust_label = 0;
 	if(title == "Time on page") {
 	  adjust_label = 3;
