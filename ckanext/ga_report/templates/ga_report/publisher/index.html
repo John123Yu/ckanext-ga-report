@@ -35,7 +35,7 @@
      <div class="charts" id="chart1"></div>
      <script>
         $(function() {
-          barChart({{c.publisher_chart|safe}},'Top Publishers','views',"#chart1",true, 20)
+          barChart({{c.publisher_chart|safe}},'Top Organizations','views',"#chart1",true, 20)
         });
      </script>
 
@@ -57,9 +57,16 @@
 {% endblock %}
 
 {% block secondary_content %}
+  {% block resources_list %}
     {% set download_link=h.url_for(controller='ckanext.ga_report.controller:GaDatasetReport',action='publisher_csv',month=c.month or 'all') %}
-    <a class="btn button btn-info btn-sm download_button" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
-    <a class="btn button btn-info btn-sm download_button" href="/site-usage">Site Usage Statistics</a>
-    <a class="btn button btn-info btn-sm download_button" href="/site-usage/dataset">Dataset Statistics</a>
+    <section class="module module-narrow resources">
+          <ul class="unstyled nav nav-simple">
+	    <li class="nav-item "><a href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a></li>
+            <li class="nav-item"><a href="/site-usage">Site Usage Statistics</a></li>
+	    <li class="nav-item active"><a href="/site-usage/publisher">Organization Statistics</a></li>
+            <li class="nav-item"><a href="/site-usage/dataset">Dataset Statistics</a></li>
+          </ul>
+    </section>
+  {% endblock %}
 {% endblock %}
 

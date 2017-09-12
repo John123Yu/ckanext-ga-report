@@ -29,5 +29,5 @@ function openTab(evt, tr, chartId, tableClick) {
 document.getElementById("chart0_click").click();
 
 $(function() {
-    $('a').tooltip({placement: 'top'});
+    $('a').tooltip({placement: 'right'});
 });

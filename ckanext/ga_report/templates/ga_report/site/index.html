@@ -602,21 +602,29 @@
 {% endblock %}
 
 {% block secondary_content %}
-  {% with download_link=h.url_for(controller='ckanext.ga_report.controller:GaReport',action='csv',month=c.month or 'all') %}
-    <a class="btn button btn-info btn-sm download_button" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a>
-  {% endwith %}
-    <a class="btn button btn-info btn-sm download_button" href="/site-usage/dataset">Dataset Statistics</a>
-    <a class="btn button btn-info btn-sm download_button" href="/site-usage/publisher">Organization Statistics</a> 
+  {% block resources_list %}
+    {% with download_link=h.url_for(controller='ckanext.ga_report.controller:GaReport',action='csv',month=c.month or 'all') %}
+    <section class="module module-narrow resources">
+          <h2 class="module-heading"><i class="icon-copy"></i> {{ _("Resources") }}</h2>
+          <ul class="unstyled nav nav-simple">
+            <li class="nav-item "><a href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a></li>
+            <li class="nav-item active"><a href="/site-usage">Site Usage Statistics</a></li>
+            <li class="nav-item"><a href="/site-usage/publisher">Organization Statistics</a></li>
+            <li class="nav-item"><a href="/site-usage/dataset">Dataset Statistics</a></li>
+          </ul>
+    </section>
+    <br>
+    <h2 class="module-heading" style="border-bottom:0px";><i class="icon-th-large"></i> {{ _("Google Analytics Table") }}</h2>
     <table class="table table-bordered info_table">
       <tr>
-	<th style="font-size:14px;background-color:#8CA0A6;">Dimension</th>
-	<th style="font-size:14px;background-color:#8CA0A6;">Metric</th>
+	<th style="font-size:14px;">Dimensions</th>
+	<th style="font-size:14px;">Metrics</th>
       </tr>
       <tr class="tabcontent_info" id="total_traffic_info" style="display:none;">
 	<td></td>
 	<td></td>
       </tr>
-      <tr class="tabcontent_info" id="page_views_info" onclick="openTab(event, 'page_views', 'chart1')">
+      <tr class="tabcontent_info active" id="page_views_info" onclick="openTab(event, 'page_views', 'chart1')">
 	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="A page on the website specified by path and/or query parameters">pagePath</a></td>
 	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The total number of pageviews for the property">pageviews</a></td>
       </tr>
@@ -684,5 +692,7 @@
 	<td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The page that users visited after performing an internal search on the site">searchAfterDestinationPage</a></td>
         <td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The number of times a search result page was viewed">searchResultViews</a></td>
       </tr>
-    </table> 
+    </table>
+    {% endwith %}
+  {% endblock %} 
 {% endblock %}

@@ -93,13 +93,26 @@ li a.selection {
 }
 
 .info_table {
-  margin: 12.5px 20px 20px 20px !important;
+  margin: 0px;
   font-size: 11px;
-  width: 85% !important;
+  width: 100% !important;
+  border-left: 0px !important;
+  border-right: 0px;
+  border-radius: 0px;
+}
+
+.info_table tr {
+  border-radius: 0px;
+}
+
+.tabcontent_info:hover {
+  background-color: #EEEEEE !important;
 }
 
 .info_table th, .info_table td {
   padding: 4px 3px 3px 4px !important;
+  border-left: 0px;
+  border-radius: 0px !important;
 }
 
 .dropdown-menu {
