@@ -102,22 +102,6 @@ li a.selection {
   padding: 4px 3px 3px 4px !important;
 }
 
-.tooltip.in {
-  opacity: 1;
-}
-
-.tooltip > .tooltip-inner {
-  opacity: 1 !important;
-  color: rgb(40, 72, 107);
-  padding: 10px !important;
-  font-size: 15px !important;
-  background-color: rgb(255, 236, 96);
-}
-
-.tooltip > .tooltip-arrow {
-  color: rgb(255, 236, 96);
-}
-
 .dropdown-menu {
   left: 0px !important;
 }
@@ -127,6 +111,8 @@ li a.selection {
   padding-left: 5px;
   text-align: center;
 }
+
 .tabcontent_info {
   cursor: pointer;
 }
+

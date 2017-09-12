@@ -1,6 +1,7 @@
 var count = 0;
 var last_div;
-function openTab(evt, cityName, chartId) {
+function openTab(evt, tr, chartId, tableClick) {
+    if(tableClick == undefined) { tableClick = true; }
     last_div = chartId;
     // Declare all variables
     var i, tabcontent, tablinks;
@@ -17,22 +18,16 @@ function openTab(evt, cityName, chartId) {
         tabcontent_info[i].style.backgroundColor = "white";
     }
 
-    document.getElementById(cityName).style.display = "block";
-    document.getElementById(cityName + "_info").style.color = "rgb(70, 121, 178)";
-    document.getElementById(cityName + "_info").style.fontWeight = "700";
-    document.getElementById(cityName + "_info").style.backgroundColor = "rgb(255, 236, 96)";
-//    document.getElementById(cityName + "_info").style.display = "block";
-
-  //if(count != 0) {
-  //  $('html,body').animate({
-  //      scrollTop: $("#" + chartId).offset().top - 100},
-  //      'fast')
-  //}
-  //count = 1;
+    document.getElementById(tr).style.display = "block";
+    if(tableClick) {
+      document.getElementById(tr + "_info").style.color = "rgb(70, 121, 178)";
+      document.getElementById(tr + "_info").style.fontWeight = "700";
+      document.getElementById(tr + "_info").style.backgroundColor = "#8CA0A6";
+    }
 }
 
 document.getElementById("chart0_click").click();
 
 $(function() {
-    $('a').tooltip({placement: 'right'});
+    $('a').tooltip({placement: 'top'});
 });
