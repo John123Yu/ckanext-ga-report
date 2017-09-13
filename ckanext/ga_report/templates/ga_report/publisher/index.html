@@ -16,8 +16,10 @@
 {% endblock %}
 
 {% block breadcrumb_content %}
+    {% set download_link=h.url_for(controller='ckanext.ga_report.controller:GaDatasetReport',action='publisher_csv',month=c.month or 'all') %}
     <li><a href="/site-usage">Site Analytics</a></li>
     <li><a href="/site-usage/publisher">Publishers</a></li>
+    <a href="{{download_link}}" class="btn btn-info download_button"><i class="icon-download"></i>&nbsp; Download CSV</a>
 {% endblock %}
 
 {% block page_header %}
@@ -57,11 +59,10 @@
 {% endblock %}
 
 {% block secondary_content %}
+  <h2 class="module-heading" style="border-top:0px;"><i class="icon-copy"></i> {{ _("Choose Report") }}</h2>
   {% block resources_list %}
-    {% set download_link=h.url_for(controller='ckanext.ga_report.controller:GaDatasetReport',action='publisher_csv',month=c.month or 'all') %}
     <section class="module module-narrow resources">
           <ul class="unstyled nav nav-simple">
-	    <li class="nav-item "><a href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a></li>
             <li class="nav-item"><a href="/site-usage">Site Usage Statistics</a></li>
 	    <li class="nav-item active"><a href="/site-usage/publisher">Organization Statistics</a></li>
             <li class="nav-item"><a href="/site-usage/dataset">Dataset Statistics</a></li>

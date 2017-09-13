@@ -17,8 +17,14 @@
 
 
 {% block breadcrumb_content %}
-    <li><a href="/site-usage">Site Analytics</a></li>
-    <li><a href="/site-usage">Site-wide</a></li>
+    {% set download_link=h.url_for(controller='ckanext.ga_report.controller:GaReport',action='csv',month=c.month or 'all') %}
+    <div class="breadcrumb_div">
+      <li><a href="/site-usage">Site Analytics</a></li>
+      <li><a href="/site-usage">Site-wide</a></li>
+    </div>
+    <div class="download_div">
+      <a class="btn btn-info download_button" href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download CSV</a>
+    </div>
 {% endblock %}
 
 {% block primary_content %}
@@ -603,11 +609,9 @@
 
 {% block secondary_content %}
   {% block resources_list %}
-    {% with download_link=h.url_for(controller='ckanext.ga_report.controller:GaReport',action='csv',month=c.month or 'all') %}
+    <h2 class="module-heading module-heading-first"><i class="icon-copy"></i> {{ _("Choose Report") }}</h2>
     <section class="module module-narrow resources">
-          <h2 class="module-heading"><i class="icon-copy"></i> {{ _("Resources") }}</h2>
           <ul class="unstyled nav nav-simple">
-            <li class="nav-item "><a href="{{download_link}}"><i class="icon-download"></i>&nbsp; Download as CSV</a></li>
             <li class="nav-item active"><a href="/site-usage">Site Usage Statistics</a></li>
             <li class="nav-item"><a href="/site-usage/publisher">Organization Statistics</a></li>
             <li class="nav-item"><a href="/site-usage/dataset">Dataset Statistics</a></li>
@@ -693,6 +697,5 @@
         <td><a style="text-decoration:none;color:black;" data-toggle="tooltip" data-title="The number of times a search result page was viewed">searchResultViews</a></td>
       </tr>
     </table>
-    {% endwith %}
   {% endblock %} 
 {% endblock %}
