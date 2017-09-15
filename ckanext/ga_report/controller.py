@@ -400,17 +400,19 @@ class GaDatasetReport(BaseController):
     Displays the pageview and visit count for datasets
     with options to filter by publisher and time period.
     """
-    def publisher_csv(self, month):
+    def organization_csv(self, month):
         '''
         Returns a CSV of each publisher with the total number of dataset
         views & visits.
         '''
+	with open("/tmp/python.log", "a") as mylog:
+    	    mylog.write("\n%s\n" % "HELLO")
         c.month = month if not month == 'all' else ''
         response.headers['Content-Type'] = "text/csv; charset=utf-8"
-        response.headers['Content-Disposition'] = str('attachment; filename=publishers_%s.csv' % (month,))
+        response.headers['Content-Disposition'] = str('attachment; filename=organizations_%s.csv' % (month,))
 
         writer = csv.writer(response)
-        writer.writerow(["Publisher Title", "Publisher Name", "Views", "Visits", "Period Name"])
+        writer.writerow(["Organization Title", "Organization Name", "Views", "Visits", "Period Name"])
 
         top_publishers = _get_top_publishers(limit=None)
 
@@ -440,17 +442,16 @@ class GaDatasetReport(BaseController):
             str('attachment; filename=datasets_%s_%s.csv' % (c.publisher_name, month,))
 
         writer = csv.writer(response)
-        writer.writerow(["Dataset Title", "Dataset Name", "Views", "Visits", "Resource downloads", "Period Name"])
+        writer.writerow(["Dataset Title", "Dataset Name", "Views", "Visits", "Period Name"])
 
         for package,view,visit,downloads in packages:
             writer.writerow([package.title.encode('utf-8'),
                              package.name.encode('utf-8'),
                              view,
                              visit,
-                             downloads,
                              month])
 
-    def publishers_month(self, month):
+    def organizations_month(self, month):
         c.months, c.day = _month_details(GA_Url)
 
         def convert_for_chart(arg):
@@ -473,9 +474,9 @@ class GaDatasetReport(BaseController):
         chart_entries = map(convert_for_chart, c.top_publishers)[:20]
         setattr(c, 'publisher_chart', json.dumps(chart_entries))
 
-        return render('ga_report/publisher/publisher_month.html')
+        return render('ga_report/organization/organization_month.html')
 	
-    def publishers(self):
+    def organizations(self):
         '''A list of publishers and the number of views/visits for each'''
 
         # Get the month details by fetching distinct values and determining the
@@ -499,7 +500,7 @@ class GaDatasetReport(BaseController):
         chart_entries = map(convert_for_chart, c.top_publishers)[:20]
         setattr(c, 'publisher_chart', json.dumps(chart_entries))
 
-        return render('ga_report/publisher/index.html')
+        return render('ga_report/organization/index.html')
 
     def _get_packages(self, publisher=None, month='', count=-1):
         '''Returns the datasets in order of views'''
@@ -546,9 +547,9 @@ class GaDatasetReport(BaseController):
         '''
         Lists the most popular datasets across all publishers
         '''
-        return self.read_publisher(None)
+        return self.read_organization(None)
 
-    def read_publisher(self, id):
+    def read_organization(self, id):
         '''
         Lists the most popular datasets for a publisher (or across all publishers)
         '''
@@ -585,7 +586,7 @@ class GaDatasetReport(BaseController):
         month = c.month or 'All'
         c.publisher_page_views = 0
         q = model.Session.query(GA_Url).\
-            filter(GA_Url.url=='/publisher/%s' % c.publisher_name)
+            filter(GA_Url.url=='/organization/%s' % c.publisher_name)
         entry = q.filter(GA_Url.period_name==c.month).first()
         c.publisher_page_views = entry.pageviews if entry else 0
 
@@ -594,7 +595,7 @@ class GaDatasetReport(BaseController):
         chart_entries = map(convert_for_chart, c.top_packages)[:20]
         setattr(c, 'dataset_chart', json.dumps(chart_entries))
 
-        return render('ga_report/publisher/read.html')
+        return render('ga_report/organization/read.html')
 
     def read_month(self, month):
         count = 100
@@ -643,7 +644,7 @@ class GaDatasetReport(BaseController):
         chart_entries = map(convert_for_chart, c.top_packages)[:20]
         setattr(c, 'dataset_chart', json.dumps(chart_entries))
 
-        return render('ga_report/publisher/dataset_month.html')
+        return render('ga_report/organization/dataset_month.html')
 	
 def _to_rickshaw(data, percentageMode=False):
     if data==[]:

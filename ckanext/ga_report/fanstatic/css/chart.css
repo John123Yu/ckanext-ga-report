@@ -23,6 +23,7 @@
   color: black;
   border-radius: 4px;
   pointer-events: none;
+  z-index: 99;
 }
 
 .ga-reports-table {

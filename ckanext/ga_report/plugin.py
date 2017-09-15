@@ -73,19 +73,19 @@ class GAReportPlugin(p.SingletonPlugin):
 
         # GaDatasetReport
         map.connect(
-            '/site-usage/publisher',
+            '/site-usage/organization',
             controller='ckanext.ga_report.controller:GaDatasetReport',
-            action='publishers'
+            action='organizations'
         )
         map.connect(
-            '/site-usage/publisher_{month}',
+            '/site-usage/organization_{month}',
             controller='ckanext.ga_report.controller:GaDatasetReport',
-            action='publishers_month'
+            action='organizations_month'
         )
         map.connect(
-            '/site-usage/publishers_{month}.csv',
+            '/site-usage/organizations_{month}.csv',
             controller='ckanext.ga_report.controller:GaDatasetReport',
-            action='publisher_csv'
+            action='organization_csv'
         )
         map.connect(
             '/site-usage/dataset/datasets_{id}_{month}.csv',
@@ -103,9 +103,9 @@ class GAReportPlugin(p.SingletonPlugin):
             action='read_month'
         )
         map.connect(
-            '/site-usage/publisher/{id}',
+            '/site-usage/organization/{id}',
             controller='ckanext.ga_report.controller:GaDatasetReport',
-            action='read_publisher'
+            action='read_organization'
         )
         return map
 
