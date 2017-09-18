@@ -6,7 +6,6 @@ var barChart = function(dataArray, title, yAxis, chart, links, marginBottom) {
 	}
 	var rect_width = 25;
 	var y_axis_num = "11px";
-	console.log("DATA ARRAY: ", dataArray)
 	if(dataArray.length == 0) { return; }
 	var longestEntry =  dataArray.sort(function (a, b) { return b[1].length - a[1].length; })[0];
 	dataArray = dataArray.sort(function(a, b){return b[0] - a[0];});
@@ -21,7 +20,6 @@ var barChart = function(dataArray, title, yAxis, chart, links, marginBottom) {
 		var margin = {top: 50, right: 20, bottom: longestEntry[1].length * 5.27 + marginBottom, left: 60},
 		    width = 730 - margin.left - margin.right,
 		    height = 450;
-		    console.log(window.innerWidth)
 		    if(window.innerWidth < 990 && window.innerWidth > 800){
 		      width = 730 - (990 - window.innerWidth) / 1.2 - margin.left - margin.right;
 		      dataArray = dataArray.slice(0, 18);

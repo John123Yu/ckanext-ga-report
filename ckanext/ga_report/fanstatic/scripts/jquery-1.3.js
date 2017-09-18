@@ -10,7 +10,6 @@
  * Revision: 6246
  */
 
-console.log("HELLOOOOO");
 (function(){
 
 var 
