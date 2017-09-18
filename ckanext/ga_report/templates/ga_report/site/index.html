@@ -4,7 +4,7 @@
 {% block title %}Site Usage - {{ super() }}{% endblock %}
 
 {% block header %}
-  {{ super() }}
+  {% include 'header-site-usage.html' %}
   <script  src="https://code.jquery.com/jquery-1.3.min.js" integrity="sha256-kAGRpEMRXYtIqdaNMGLos9cSlyeVG4YXRltIW68lMAY=" crossorigin="anonymous"></script> 
   {% resource 'scripts/scripts/ajax.js' %}
   {% resource 'scripts/scripts/d3.js' %}
@@ -80,8 +80,8 @@
     <div class="enclosing_body col-sm-10">
       <div class="tabcontent" id="total_traffic">
 	<div class="col-sm-12 top_row hero-unit">
-          <h1 class="site_title">Google Analytics</h1>
-          <p>This page displays Google Analytics for data.gov and catalog.data.gov</p>
+          <h1 class="site_title">Site Usage Statistics</h1>
+          <p>This page displays site usage statistics for Data.gov and Catalog.data.gov</p>
         </div>
         <form class="form-inline" action="{{h.url_for(controller='ckanext.ga_report.controller:GaReport',action='index')}}" method="get">
           <h4 class="ga-reports-heading">Show stats table for:</h4>
