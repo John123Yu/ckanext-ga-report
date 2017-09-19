@@ -151,11 +151,11 @@ section.module {
   border-radius: 0px !important;
 }
 
-.dropdown-menu {
-  left: 0px !important;
+.nav-dropdown-menu {
+ left: 0px !important;
 }
 
-.dropdown-menu li a{
+.nav-dropdown-menu li a{
   padding-right: 5px;
   padding-left: 5px;
   text-align: center;
